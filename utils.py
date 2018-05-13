@@ -25,14 +25,16 @@ def awaited_property(func_or_name):
 
 
 def element_patient_getter(attr_name):
-    return partial(wait_and_get_element, attr_name=attr_name)
+    return partial(wait_and_get_property, attr_name=attr_name)
 
 
-def wait_and_get_element(self, attr_name):
-    print(self)
+def wait_and_get_property(self, attr_name):
+    return wait_and_get_element(self, getattr(self, attr_name))
+
+
+def wait_and_get_element(self, xpath):
     WebDriverWait(self.driver, constants.WAIT_TIME).until(
-        expected_conditions.visibility_of_element_located((By.XPATH, getattr(self, attr_name)))
+        expected_conditions.visibility_of_element_located((By.XPATH, xpath))
     )
 
-    self.driver.find_element_by_xpath(getattr(self, attr_name))
-    return
+    return self.driver.find_element_by_xpath(xpath)

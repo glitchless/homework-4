@@ -35,6 +35,7 @@ class VideoTest(unittest.TestCase):
             self.driver.save_screenshot(
                 SCREENSHOT_PATH + 'login/{time}.png'.format(time=datetime.now().time().isoformat()))
 
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_going_to_videopage(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -42,7 +43,6 @@ class VideoTest(unittest.TestCase):
         video_page = VideoPage(self.driver)
 
         video_page.wait_for_load()
-        print self.driver.current_url
 
         self.assertEquals(self.driver.current_url, constants.BASE_URL + VideoPage.PATH + 'top')
 
@@ -50,6 +50,7 @@ class VideoTest(unittest.TestCase):
             self.driver.save_screenshot(
                 SCREENSHOT_PATH + 'videopage/{time}.png'.format(time=datetime.now().time().isoformat()))
 
+    @unittest.skip('WIP')
     def test_post_video(self):
         main_page = MainPage(self.driver)
         main_page.open_note()
@@ -64,6 +65,21 @@ class VideoTest(unittest.TestCase):
 
         wall_post.check_exist_video()
         wall_post.post()
+
+
+    def test_scrolling_loads_videos(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoPage(self.driver)
+
+        video_list = video_page.video_list
+
+        videos_count = len(video_list.get_property('children'))
+
+        video_page.scroll_videos_to(1000000)
+
+        video_page.wait_and_get_video_by_num(videos_count + 1)
 
     def tearDown(self):
         main_page = MainPage(self.driver)
