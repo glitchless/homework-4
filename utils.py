@@ -3,13 +3,14 @@ from functools import partial
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+from inspect import isroutine
 
 import constants
 
 
 def awaited_property(func_or_name):
-    # type: (callable | str) -> property | callable
-    if callable(func_or_name):
+    # type: (function | str) -> property | function
+    if isroutine(func_or_name):
         func = func_or_name
         name = '_' + str.upper(func.__name__)
 
