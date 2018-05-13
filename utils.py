@@ -7,11 +7,20 @@ from selenium.webdriver.support.wait import WebDriverWait
 import constants
 
 
-def awaited_property(func, name=None):
-    if not name:
+def awaited_property(func_or_name):
+    # type: (callable | str) -> property | callable
+    if callable(func_or_name):
+        func = func_or_name
         name = '_' + str.upper(func.__name__)
 
-    return property(fget=element_patient_getter(name))
+        return property(fget=element_patient_getter(name))
+
+    elif isinstance(func_or_name, str):
+        name = func_or_name
+        return lambda func: property(fget=element_patient_getter(name))
+
+    else:
+        raise TypeError('Argument is not a str or function')
 
 
 def element_patient_getter(attr_name):
