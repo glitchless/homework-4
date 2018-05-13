@@ -34,15 +34,20 @@ class VideoTest(unittest.TestCase):
         main_page = MainPage(self.driver)
         main_page.open()
         main_page.authentificate(self.LOGIN, self.PASSWORD)
-        self.driver.save_screenshot(SCREENSHOT_PATH + 'login{time}.png'.format(time=datetime.now().time().isoformat()))
+        self.driver.save_screenshot(SCREENSHOT_PATH + 'login/{time}.png'.format(time=datetime.now().time().isoformat()))
         main_page.go_to_videos()
 
         video_page = VideoPage(self.driver)
 
         video_page.wait_for_load()
+        print self.driver.current_url
 
-        self.driver.save_screenshot(SCREENSHOT_PATH + 'videopage{time}.png'.format(time=datetime.now().time().isoformat()))
+        self.assertEquals(self.driver.current_url, constants.BASE_URL + 'video/top')
+
+        if constants.MAKE_SCREENSHOTS:
+            self.driver.save_screenshot(SCREENSHOT_PATH + 'videopage/{time}.png'.format(time=datetime.now().time().isoformat()))
 
         main_page.hard_clear_authentification()
         self.driver.refresh()
-        self.driver.save_screenshot(SCREENSHOT_PATH + 'sessionreset{time}.png'.format(time=datetime.now().time().isoformat()))
+        if constants.MAKE_SCREENSHOTS:
+            self.driver.save_screenshot(SCREENSHOT_PATH + 'sessionreset/{time}.png'.format(time=datetime.now().time().isoformat()))

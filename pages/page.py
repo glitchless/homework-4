@@ -1,9 +1,11 @@
 import urlparse
 from selenium.webdriver import Remote
 
+import constants
+
 
 class Page:
-    BASE_URL = 'https://ok.ru/'
+    BASE_URL = constants.BASE_URL
     PATH = ''
 
     def __init__(self, driver):
