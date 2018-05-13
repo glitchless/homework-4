@@ -1,4 +1,5 @@
 import urlparse
+from selenium.webdriver import Remote
 
 
 class Page:
@@ -6,6 +7,7 @@ class Page:
     PATH = ''
 
     def __init__(self, driver):
+        # type: (Remote) -> None
         self.driver = driver
 
     def open(self):

@@ -6,10 +6,10 @@ from component import Component
 
 class MainPage(Page):
     PATH = ''
-    FEED_BUTTON = '//a[@href="/feed"]'
+    _VIDEOPAGE_BUTTON = '//*[@id="hook_Block_TopMenuVideo"]/div/div[2]/div'
 
-    def go_to_feed(self):
-        self.driver.find_element_by_xpath(self.FEED_BUTTON).click()
+    def go_to_videos(self):
+        self.driver.find_element_by_xpath(self._VIDEOPAGE_BUTTON).click()
 
     def authentificate(self, login=environ['LOGIN'], password=environ['PASSWORD']):
         auth_form = AuthForm(self.driver)
@@ -17,6 +17,9 @@ class MainPage(Page):
         auth_form.set_login(login)
         auth_form.set_password(password)
         auth_form.submit()
+
+    def hard_clear_authentification(self):
+        self.driver.delete_all_cookies()
 
 
 class AuthForm(Component):
