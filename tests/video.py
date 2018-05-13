@@ -14,17 +14,20 @@ SCREENSHOT_PATH = constants.SCREENSHOT_PATH + '/video/'
 
 
 class VideoTest(unittest.TestCase):
-    LOGIN = environ['LOGIN']
-    PASSWORD = environ['PASSWORD']
+    LOGIN = environ['LOGIN']  # type: str
+    PASSWORD = environ['PASSWORD']  # type: str
+    driver = None  # type: webdriver.Remote
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         browser = environ.get('BROWSER', 'CHROME')
 
-        self.driver = webdriver.Remote(
+        cls.driver = webdriver.Remote(
             command_executor=constants.COMMAND_EXECUTOR,
             desired_capabilities=getattr(DesiredCapabilities, browser).copy()
         )
 
+    def setUp(self):
         main_page = MainPage(self.driver)
         main_page.open()
         main_page.authentificate(self.LOGIN, self.PASSWORD)
@@ -41,7 +44,7 @@ class VideoTest(unittest.TestCase):
         video_page.wait_for_load()
         print self.driver.current_url
 
-        self.assertEquals(self.driver.current_url, constants.BASE_URL + 'video/top')
+        self.assertEquals(self.driver.current_url, constants.BASE_URL + VideoPage.PATH + 'top')
 
         if constants.MAKE_SCREENSHOTS:
             self.driver.save_screenshot(
@@ -69,4 +72,12 @@ class VideoTest(unittest.TestCase):
         if constants.MAKE_SCREENSHOTS:
             self.driver.save_screenshot(
                 SCREENSHOT_PATH + 'sessionreset/{time}.png'.format(time=datetime.now().time().isoformat()))
-        self.driver.quit()
+
+    @classmethod
+    def tearDownClass(cls):
+        if constants.MAKE_SCREENSHOTS:
+            cls.driver.save_screenshot(
+                SCREENSHOT_PATH + 'sessionreset/{time}.png'.format(time=datetime.now().time().isoformat()))
+        cls.driver.quit()
+
+

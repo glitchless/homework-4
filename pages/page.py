@@ -7,6 +7,7 @@ import constants
 class Page:
     BASE_URL = constants.BASE_URL
     PATH = ''
+    driver = None  # type: webdriver.Remote
 
     def __init__(self, driver):
         # type: (Remote) -> None

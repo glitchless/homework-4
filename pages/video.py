@@ -7,13 +7,20 @@ from page import Page
 from os import environ
 from component import Component
 import constants
+from utils import awaited_property
 
 
 class VideoPage(Page):
-    PATH = ''
+    PATH = 'video/'
     _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
 
     def wait_for_load(self):
-        WebDriverWait(self.driver, constants.WAIT_TIME).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, self._HOOK_BLOCK))
-        )
+        self.hook_block
+
+    @awaited_property
+    def hook_block(self):
+        pass
+
+
+# video_page = VideoPage(None)
+# print video_page.HOOK_BLOCK
