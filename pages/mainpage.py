@@ -7,6 +7,10 @@ from component import Component
 class MainPage(Page):
     PATH = ''
     _VIDEOPAGE_BUTTON = '//*[@id="hook_Block_TopMenuVideo"]/div/div[2]/div'
+    _NOTE_FIELD = '//div[@class="input_placeholder"]'
+
+    def open_note(self):
+        self.driver.find_element_by_xpath(self._NOTE_FIELD).click()
 
     def go_to_videos(self):
         self.driver.find_element_by_xpath(self._VIDEOPAGE_BUTTON).click()
@@ -25,7 +29,7 @@ class MainPage(Page):
 class AuthForm(Component):
     _LOGIN_FIELD = '//input[@name="st.email"]'
     _PASSWORD_FIELD = '//input[@name="st.password"]'
-    _SUBMIT_BUTTON = '//input[@value="Войти"]'
+    _SUBMIT_BUTTON = u'//*[@id="anonymPageContent"]/div[2]/div/div[3]/form/div[5]/div[1]/input'
 
     def set_login(self, login):
         self.driver.find_element_by_xpath(self._LOGIN_FIELD).send_keys(login)
