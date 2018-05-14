@@ -66,7 +66,6 @@ class VideoTest(unittest.TestCase):
         wall_post.check_exist_video()
         wall_post.post()
 
-
     def test_scrolling_loads_videos(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -95,5 +94,3 @@ class VideoTest(unittest.TestCase):
             cls.driver.save_screenshot(
                 SCREENSHOT_PATH + 'sessionreset/{time}.png'.format(time=datetime.now().time().isoformat()))
         cls.driver.quit()
-
-
