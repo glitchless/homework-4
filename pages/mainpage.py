@@ -6,7 +6,7 @@ from component import Component
 
 class MainPage(Page):
     PATH = ''
-    _VIDEOPAGE_BUTTON = '//*[@id="hook_Block_TopMenuVideo"]/div/div[2]/div'
+    _VIDEOPAGE_BUTTON = '//div[@class="toolbar_nav_a toolbar_nav_a__video"]'
     _NOTE_FIELD = '//div[@class="input_placeholder"]'
 
     def open_note(self):

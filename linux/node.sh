@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-cd ../
 
 java -Dwebdriver.chrome.driver="./linux/chromedriver" \
     -Dwebdriver.gecko.driver="./linux/geckodriver" \

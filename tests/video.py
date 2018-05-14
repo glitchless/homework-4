@@ -104,5 +104,3 @@ class VideoTest(unittest.TestCase):
             cls.driver.save_screenshot(
                 SCREENSHOT_PATH + 'sessionreset/{time}.png'.format(time=datetime.now().time().isoformat()))
         cls.driver.quit()
-
-
