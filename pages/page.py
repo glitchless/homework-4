@@ -13,7 +13,8 @@ class Page:
         # type: (Remote) -> None
         self.driver = driver
 
-    def open(self):
-        url = urlparse.urljoin(self.BASE_URL, self.PATH)
+    def open(self, relative_url):
+        # type: (str) -> None
+        url = urlparse.urljoin(self.BASE_URL, self.PATH, relative_url)
         self.driver.get(url)
         # self.driver.maximize_window()

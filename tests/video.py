@@ -66,7 +66,7 @@ class VideoTest(unittest.TestCase):
         wall_post.check_exist_video()
         wall_post.post()
 
-
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_scrolling_loads_videos(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -80,6 +80,15 @@ class VideoTest(unittest.TestCase):
         video_page.scroll_videos_to(1000000)
 
         video_page.wait_and_get_video_by_num(videos_count + 1)
+
+    def test_video_watch_later(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoPage(self.driver)
+
+        video_page.open_video_by_id(566094269061)
+        # video_page.
 
     def tearDown(self):
         main_page = MainPage(self.driver)
