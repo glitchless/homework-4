@@ -11,7 +11,7 @@ from utils import awaited_property, wait_and_get_element
 
 
 class VideoPage(Page):
-    PATH = 'video/'
+    PATH = 'video/{id}'
 
     MY_VIDEO_PATH = 'myVideo/'
 
@@ -20,34 +20,10 @@ class VideoPage(Page):
     _VIDEO_SCROLL_LIST = '//*[@id="layer_main_cnt_scroll"]'
     _VIDEO_BY_NUM = '//*[@id="vv_main_content"]/div/div/div[1]/div[{num}]'
 
-    def wait_for_load(self):
-        self.wait_and_get_hook_block
+    def open(self, relative_url=''):
+        raise NotImplemented('Can`t open a video without an id')
 
-    @awaited_property
-    def video_list(self):
-        pass
+    def open_by_id(self, video_id):
+        # type: (int) -> None
+        super(VideoPage, self).open(str(video_id))
 
-    @awaited_property
-    def video_scroll_list(self):
-        pass
-
-    @awaited_property
-    def hook_block(self):
-        pass
-
-    @awaited_property('_HOOK_BLOCK')
-    def wait_and_get_hook_block(self):  # то же, что и выше
-        pass
-
-    def wait_and_get_video_by_num(self, num):
-        return wait_and_get_element(self, self._VIDEO_BY_NUM.format(num=num))
-
-    def scroll_videos_to(self, y):
-        self.driver.execute_script('document.evaluate(`{xpath}`, document).iterateNext().scrollTo(0, {to})'
-                                   .format(xpath=self._VIDEO_SCROLL_LIST, to=y))
-
-    def open_my_videos_by_url(self):
-        self.open(self.MY_VIDEO_PATH)
-
-    def open_video_by_id(self, video_id):
-        self.open(str(video_id))

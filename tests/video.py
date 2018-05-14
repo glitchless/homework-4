@@ -5,6 +5,7 @@ import unittest
 
 import constants
 from pages.mainpage import MainPage
+from pages.video_list import VideoListPage
 from pages.video import VideoPage
 from datetime import datetime
 
@@ -40,11 +41,11 @@ class VideoTest(unittest.TestCase):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
-        video_page = VideoPage(self.driver)
+        video_page = VideoListPage(self.driver)
 
         video_page.wait_for_load()
 
-        self.assertEquals(self.driver.current_url, constants.BASE_URL + VideoPage.PATH + 'top')
+        self.assertEquals(self.driver.current_url, constants.BASE_URL + VideoListPage.PATH + 'top')
 
         if constants.MAKE_SCREENSHOTS:
             self.driver.save_screenshot(
@@ -71,7 +72,7 @@ class VideoTest(unittest.TestCase):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
-        video_page = VideoPage(self.driver)
+        video_page = VideoListPage(self.driver)
 
         video_list = video_page.video_list
 
@@ -82,12 +83,9 @@ class VideoTest(unittest.TestCase):
         video_page.wait_and_get_video_by_num(videos_count + 1)
 
     def test_video_watch_later(self):
-        main_page = MainPage(self.driver)
-        main_page.go_to_videos()
-
         video_page = VideoPage(self.driver)
 
-        video_page.open_video_by_id(566094269061)
+        video_page.open_by_id(566094269061)
         # video_page.
 
     def tearDown(self):
