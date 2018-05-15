@@ -15,6 +15,3 @@ class UploadPage(Page):
 
         self.driver.execute_script('document.evaluate(`{xpath}`, document).iterateNext().dispatchEvent(new Event("change"))'
                                    .format(xpath=self._VIDEO_UPLOAD))
-        print(element)
-
-        # self.driver.execute_script(self.JS_DROP_FILE, element).send_keys(os.getcwd() + '/content/video.mp4')
