@@ -2,6 +2,7 @@
 from page import Page
 from os import environ
 from component import Component
+from utils import wait_and_get_element
 
 
 class MainPage(Page):
@@ -10,10 +11,10 @@ class MainPage(Page):
     _NOTE_FIELD = '//div[@class="input_placeholder"]'
 
     def open_note(self):
-        self.driver.find_element_by_xpath(self._NOTE_FIELD).click()
+        wait_and_get_element(self, self._NOTE_FIELD).click()
 
     def go_to_videos(self):
-        self.driver.find_element_by_xpath(self._VIDEOPAGE_BUTTON).click()
+        wait_and_get_element(self, self._VIDEOPAGE_BUTTON).click()
 
     def authentificate(self, login=environ['LOGIN'], password=environ['PASSWORD']):
         auth_form = AuthForm(self.driver)
