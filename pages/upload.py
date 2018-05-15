@@ -1,4 +1,5 @@
 import os
+import time
 
 from pages.page import Page
 from utils import wait_and_get_element
@@ -12,6 +13,8 @@ class UploadPage(Page):
 
         element = root_element.find_element_by_tag_name('input')
         element.send_keys(os.getcwd() + '/content/video.mp4')
+
+        time.sleep(500)
 
         self.driver.execute_script('document.evaluate(`{xpath}`, document).iterateNext().dispatchEvent(new Event("change"))'
                                    .format(xpath=self._VIDEO_UPLOAD))

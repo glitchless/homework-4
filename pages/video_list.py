@@ -1,4 +1,5 @@
 # coding=utf-8
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -8,6 +9,7 @@ from os import environ
 from component import Component
 from urlparse import urljoin
 import constants
+import router
 from utils import awaited_property, wait_and_get_element, same_urls
 
 
@@ -17,19 +19,13 @@ class VideoListPage(Page):
     MY_VIDEO_PATH = 'myVideo/'
     WATCH_LATER_PATH = 'watchLater/'
 
-    MY_VIDEO_INNERPATHS = [
-        urljoin(urljoin(Page.BASE_URL, PATH), MY_VIDEO_PATH),
-        urljoin(urljoin(Page.BASE_URL, PATH), WATCH_LATER_PATH),
-    ]
-
-    _WATCHLATER_BUTTON = '//*[@id="vv_btn_watchLater"]'
     _FILE_UPLOAD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
     _CONFIRM_ACTION_BUTTON = '//*[@id="vv-confirm-form"]/div[2]/input'
 
     _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
     _VIDEO_UPLOAD_PROGRESS = '//div[@class="progress __dark"]'
-    _VIDEO_ADD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]/a[1]'
+    _VIDEO_ADD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
     _VIDEO_SCROLL_LIST = '//*[@id="layer_main_cnt_scroll"]'
     _VIDEOS = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
     _VIDEO_BY_NUM = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
@@ -37,17 +33,6 @@ class VideoListPage(Page):
     _VIDEO_LIST_MYVIDEO = '//*[@id="vv_main_content"]/div/div'
     _VIDEOS_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
     _VIDEO_BY_NUM_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
-
-    @property
-    def is_on_myvideos_page(self):
-        return bool(filter(lambda url: same_urls(self.driver.current_url, url), self.MY_VIDEO_INNERPATHS))
-
-    def open_my_videos_by_url(self):
-        self.open(self.MY_VIDEO_PATH)
-
-    def open_watchlater(self):
-        self.open_my_videos_by_url()
-        wait_and_get_element(self, self._WATCHLATER_BUTTON).click()
 
     def wait_load(self):
         wait_and_get_element(self, self._VIDEO_UPLOAD_PROGRESS)
@@ -57,13 +42,9 @@ class VideoListPage(Page):
             expected_conditions.invisibility_of_element_located((By.XPATH, self._VIDEO_UPLOAD_PROGRESS))
         )
 
-    def open_video_upload(self):
+    def open_video_upload_dialog(self):
         wait_and_get_element(self, self._VIDEO_ADD_BUTTON).click()
-        return self.FileUploadDialog(self.driver)
-
-    def open_file_upload_dialog(self):
-        wait_and_get_element(self, self._FILE_UPLOAD_BUTTON).click()
-        return self.FileUploadDialog(self.driver)
+        return self.VideoUploadDialog(self.driver)
 
     def confirm_action(self):
         wait_and_get_element(self, self._CONFIRM_ACTION_BUTTON).click()
@@ -74,14 +55,15 @@ class VideoListPage(Page):
     def delete_video(self, video):
         hover = ActionChains(self.driver).move_to_element(video)
         hover.perform()
-        VideoListPage(self.driver).confirm_action()
 
         delete_button = video.find_element_by_class_name('vl_ic_delete')
         delete_button.click()
 
+        VideoListPage(self.driver).confirm_action()
+
     @property
     def video_list(self):
-        if self.is_on_myvideos_page:
+        if router.Router().is_on_myvideos_page:
             return wait_and_get_element(self, self._VIDEO_LIST_MYVIDEO)
 
         return wait_and_get_element(self, self._VIDEO_LIST)
@@ -90,16 +72,12 @@ class VideoListPage(Page):
     def video_scroll_list(self):
         pass
 
-    @awaited_property
-    def hook_block(self):
-        pass
-
     @awaited_property('_HOOK_BLOCK')
-    def wait_and_get_hook_block(self):  # то же, что и выше
+    def wait_and_get_hook_block(self):
         pass
 
     def wait_and_get_video_by_num(self, num):
-        if self.is_on_myvideos_page:
+        if router.Router().is_on_myvideos_page:
             return wait_and_get_element(self,
                                         self._VIDEO_BY_NUM_MYVIDEO.format(num=num + 1))  # нумерация в xpath с единицы
 
@@ -112,7 +90,7 @@ class VideoListPage(Page):
     @property
     def videos(self):
         self.video_list
-        if self.is_on_myvideos_page:
+        if router.Router().is_on_myvideos_page:
             return self.driver.find_elements_by_xpath(self._VIDEOS_MYVIDEO)
 
         return self.driver.find_elements_by_xpath(self._VIDEOS)
@@ -125,7 +103,7 @@ class VideoListPage(Page):
     def video_ids(self):
         return map(lambda node: int(node.get_attribute('data-id')), self.videos)
 
-    class FileUploadDialog(Component):
+    class VideoUploadDialog(Component):
         _EXTERNAL_UPLOAD_BUTTON = '//*[@id="vvc-filter"]/span[2]'
         _EXTERNAL_LINK_INPUT_FIELD = '//*[@id="hook_Form_VVAddMovieToAlbum"]/form/div[1]/div/div/input'
         _EXTERNAL_UPLOAD_APPROVE_BUTTON = '//*[@id="hook_Form_VVAddMovieToAlbum"]/form/div[3]/button'

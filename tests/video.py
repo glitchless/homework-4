@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import unittest
+import router
 
 import constants
 from pages.mainpage import MainPage
@@ -31,6 +32,8 @@ class VideoTest(unittest.TestCase):
             command_executor=constants.COMMAND_EXECUTOR,
             desired_capabilities=getattr(DesiredCapabilities, browser).copy()
         )
+
+        router.Router(driver=cls.driver)
 
     def setUp(self):
         main_page = MainPage(self.driver)
@@ -91,11 +94,11 @@ class VideoTest(unittest.TestCase):
 
         video_list_page = VideoListPage(self.driver)
 
-        video_list_page.open_my_videos_by_url()
+        router.Router().open_my_videos_by_url()
 
         video_count_initial = video_list_page.video_count
 
-        video_upload_dialog = video_list_page.open_video_upload()
+        video_upload_dialog = video_list_page.open_video_upload_dialog()
 
         video_upload_dialog.open_external_upload_dialog()
 
@@ -105,6 +108,7 @@ class VideoTest(unittest.TestCase):
 
         self.assertEqual(video_count_initial + 1, video_list_page.video_count, 'Video wasn`t added')
         video_id = video.get_attribute('data-id')
+        print video_id
 
         video_list_page.delete_video(video)
         video_ids_after_delete = video_list_page.video_ids
@@ -112,13 +116,13 @@ class VideoTest(unittest.TestCase):
         self.assertNotIn(video_id, video_ids_after_delete, 'Video was not removed')
         self.assertEqual(video_count_initial, video_list_page.video_count)
 
-    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    @unittest.skip('WIP')
     def test_upload_video(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
         video_page = VideoListPage(self.driver)
-        video_page.open_video_upload()
+        video_page.open_video_upload_dialog()
 
         upload_page = UploadPage(self.driver)
         upload_page.upload_file()
@@ -132,7 +136,7 @@ class VideoTest(unittest.TestCase):
         video_list_page = VideoListPage(self.driver)
         video_page = VideoPage(self.driver)
 
-        video_list_page.open_watchlater()
+        router.Router().open_watchlater()
 
         test_vid_in_watchlater = self.TEST_VIDEO_ID in video_list_page.video_ids
 
@@ -140,7 +144,7 @@ class VideoTest(unittest.TestCase):
             video_page.open_by_id(self.TEST_VIDEO_ID)
             video_page.toggle_watch_later()
 
-            video_list_page.open_watchlater()
+            router.Router().open_watchlater()
 
             self.assertNotIn(self.TEST_VIDEO_ID, video_list_page.video_ids,
                              'Didn`t remove video from watch later page on removing it from watch later')
@@ -149,7 +153,7 @@ class VideoTest(unittest.TestCase):
 
         video_page.toggle_watch_later()
 
-        video_list_page.open_watchlater()
+        router.Router().open_watchlater()
 
         self.assertIn(self.TEST_VIDEO_ID, video_list_page.video_ids,
                       'Didn`t add video to watch later page on marking it watch later')
