@@ -30,13 +30,13 @@ class MainPage(Page):
 class AuthForm(Component):
     _LOGIN_FIELD = '//input[@name="st.email"]'
     _PASSWORD_FIELD = '//input[@name="st.password"]'
-    _SUBMIT_BUTTON = u'//*[@id="anonymPageContent"]/div[2]/div/div[3]/form/div[5]/div[1]/input'
+    _SUBMIT_BUTTON = '//*[@id="anonymPageContent"]/div[2]/div/div[3]/form/div[5]/div[1]/input'
 
     def set_login(self, login):
-        self.driver.find_element_by_xpath(self._LOGIN_FIELD).send_keys(login)
+        wait_and_get_element(self, self._LOGIN_FIELD).send_keys(login)
 
     def set_password(self, pwd):
-        self.driver.find_element_by_xpath(self._PASSWORD_FIELD).send_keys(pwd)
+        wait_and_get_element(self, self._PASSWORD_FIELD).send_keys(pwd)
 
     def submit(self):
-        self.driver.find_element_by_xpath(self._SUBMIT_BUTTON).click()
+        wait_and_get_element(self, self._SUBMIT_BUTTON).click()

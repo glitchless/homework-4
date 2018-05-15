@@ -1,5 +1,7 @@
+import time
 from os import environ
 from selenium import webdriver
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import unittest
 
@@ -10,7 +12,6 @@ from pages.video import VideoPage
 from datetime import datetime
 
 from pages.wall import WallPost, VideoSelector
-
 SCREENSHOT_PATH = constants.SCREENSHOT_PATH + '/video/'
 
 
@@ -19,6 +20,7 @@ class VideoTest(unittest.TestCase):
     PASSWORD = environ['PASSWORD']  # type: str
     driver = None  # type: webdriver.Remote
     TEST_VIDEO_ID = 566094269061
+    TEST_EXTERNAL_VIDEO_LINK = 'https://www.youtube.com/watch?v=OPf0YbXqDm0'
 
     @classmethod
     def setUpClass(cls):
@@ -82,14 +84,33 @@ class VideoTest(unittest.TestCase):
 
         self.assertTrue(video, 'Didn`t load videos on scroll')
 
-    def test_upload_video(self):
+    def test_external_upload_video_and_delete_video(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
-        video_page = VideoListPage(self.driver)
-        video_page.open_video_upload()
+        video_list_page = VideoListPage(self.driver)
 
+        video_list_page.open_my_videos_by_url()
 
+        video_count_initial = video_list_page.video_count
+
+        video_upload_dialog = video_list_page.open_video_upload()
+
+        video_upload_dialog.open_external_upload_dialog()
+
+        video_upload_dialog.add_external_video(self.TEST_EXTERNAL_VIDEO_LINK)
+
+        video = video_list_page.wait_and_get_video_by_num(0)
+
+        self.assertEqual(video_count_initial + 1, video_list_page.video_count, 'Video wasn`t added')
+        video_id = video.get_attribute('data-id')
+
+        video_list_page.delete_video(video)
+
+        video_ids_after_delete = video_list_page.video_ids
+
+        self.assertNotIn(video_id, video_ids_after_delete, 'Video was not removed')
+        self.assertEqual(video_count_initial, video_list_page.video_count)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_video_watch_later(self):

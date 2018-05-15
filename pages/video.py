@@ -1,4 +1,5 @@
 # coding=utf-8
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -31,10 +32,11 @@ class VideoPage(Page):
         # type: (int) -> None
         super(VideoPage, self).open(str(video_id))
 
-    def toggle_watch_later(self):  # WARNING: MAY CAUSE SIDE EFFECTS
-        wait_and_get_element(self, self._VIDEO_PLAYER).click()
+    def toggle_watch_later(self):
+        video = wait_and_get_element(self, self._VIDEO_PLAYER)
+        hover = ActionChains(self.driver).move_to_element(video)
+        hover.perform()
         wait_and_get_element(self, self._VIDEO_WATCH_LATER_BUTTON).click()
-        wait_and_get_element(self, self._VIDEO_PLAYER).click()
 
     @awaited_property('_HOOK_BLOCK')
     def wait_and_get_hook_block(self):  # то же, что и выше
