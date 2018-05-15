@@ -52,17 +52,15 @@ class VideoTest(unittest.TestCase):
             self.driver.save_screenshot(
                 SCREENSHOT_PATH + 'videopage/{time}.png'.format(time=datetime.now().time().isoformat()))
 
-    @unittest.skip('WIP')
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_post_video(self):
         main_page = MainPage(self.driver)
         main_page.open_note()
 
         wall_post = WallPost(self.driver)
-        wall_post.wait_load()
         wall_post.open_video_select_dialog()
 
         video_page = VideoSelector(self.driver)
-        video_page.wait_load()
         video_page.select_first()
 
         wall_post.check_exist_video()
