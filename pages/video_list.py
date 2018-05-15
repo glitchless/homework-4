@@ -11,7 +11,6 @@ import constants
 from utils import awaited_property, wait_and_get_element, same_urls
 
 
-
 class VideoListPage(Page):
     PATH = 'video/'
 
@@ -24,6 +23,7 @@ class VideoListPage(Page):
     ]
 
     _WATCHLATER_BUTTON = '//*[@id="vv_btn_watchLater"]'
+    _FILE_UPLOAD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
 
     _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
@@ -45,6 +45,10 @@ class VideoListPage(Page):
     def open_watchlater(self):
         self.open_my_videos_by_url()
         wait_and_get_element(self, self._WATCHLATER_BUTTON).click()
+
+    def open_file_upload_dialog(self):
+        wait_and_get_element(self, self._FILE_UPLOAD_BUTTON).click()
+        return self.FileUploadDialog(self.driver)
 
     def wait_for_load(self):
         self.wait_and_get_hook_block
@@ -94,3 +98,9 @@ class VideoListPage(Page):
     @property
     def video_ids(self):
         return map(lambda node: int(node.get_attribute('data-id')), self.videos)
+
+    class FileUploadDialog(Component):
+
+
+        def open_external_upload_dialog(self):
+            pass
