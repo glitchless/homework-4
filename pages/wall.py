@@ -24,8 +24,8 @@ class WallPost(Component):
 
         while not_open:
             try:
-                one_execute = True
                 wait_and_get_element(self, self._VIDEO_ADD_BUTTON).click()
+                one_execute = True
             except WebDriverException as e:
                 if not one_execute:
                     raise e
