@@ -82,6 +82,15 @@ class VideoTest(unittest.TestCase):
 
         self.assertTrue(video, 'Didn`t load videos on scroll')
 
+    def test_upload_video(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoListPage(self.driver)
+        video_page.open_video_upload()
+
+
+
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_video_watch_later(self):
         video_list_page = VideoListPage(self.driver)

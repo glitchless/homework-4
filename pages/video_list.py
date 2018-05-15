@@ -11,7 +11,6 @@ import constants
 from utils import awaited_property, wait_and_get_element, same_urls
 
 
-
 class VideoListPage(Page):
     PATH = 'video/'
 
@@ -19,14 +18,15 @@ class VideoListPage(Page):
     WATCH_LATER_PATH = 'watchLater/'
 
     MY_VIDEO_INNERPATHS = [
-            urljoin(urljoin(Page.BASE_URL, PATH), MY_VIDEO_PATH),
-            urljoin(urljoin(Page.BASE_URL, PATH), WATCH_LATER_PATH),
+        urljoin(urljoin(Page.BASE_URL, PATH), MY_VIDEO_PATH),
+        urljoin(urljoin(Page.BASE_URL, PATH), WATCH_LATER_PATH),
     ]
 
     _WATCHLATER_BUTTON = '//*[@id="vv_btn_watchLater"]'
 
     _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
+    _VIDEO_ADD_BUTTON = '//div[@class="vl_add-video"]'
     _VIDEO_SCROLL_LIST = '//*[@id="layer_main_cnt_scroll"]'
     _VIDEOS = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
     _VIDEO_BY_NUM = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
@@ -42,6 +42,9 @@ class VideoListPage(Page):
     def open_my_videos_by_url(self):
         self.open(self.MY_VIDEO_PATH)
 
+    def open_video_upload(self):
+        wait_and_get_element(self, self._VIDEO_ADD_BUTTON).click()
+
     def open_watchlater(self):
         self.open_my_videos_by_url()
         wait_and_get_element(self, self._WATCHLATER_BUTTON).click()
@@ -55,7 +58,6 @@ class VideoListPage(Page):
             return wait_and_get_element(self, self._VIDEO_LIST_MYVIDEO)
 
         return wait_and_get_element(self, self._VIDEO_LIST)
-
 
     @awaited_property
     def video_scroll_list(self):
@@ -71,7 +73,8 @@ class VideoListPage(Page):
 
     def wait_and_get_video_by_num(self, num):
         if self.is_on_myvideos_page:
-            return wait_and_get_element(self, self._VIDEO_BY_NUM_MYVIDEO.format(num=num + 1)) # нумерация в xpath с единицы
+            return wait_and_get_element(self,
+                                        self._VIDEO_BY_NUM_MYVIDEO.format(num=num + 1))  # нумерация в xpath с единицы
 
         return wait_and_get_element(self, self._VIDEO_BY_NUM.format(num=num + 1))  # нумерация в xpath с единицы
 
