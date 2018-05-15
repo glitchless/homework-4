@@ -13,12 +13,8 @@ from utils import awaited_property, wait_and_get_element
 class VideoPage(Page):
     PATH = 'video/{id}'
 
-    MY_VIDEO_PATH = 'myVideo/'
-
-    _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
-    _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
-    _VIDEO_SCROLL_LIST = '//*[@id="layer_main_cnt_scroll"]'
-    _VIDEO_BY_NUM = '//*[@id="vv_main_content"]/div/div/div[1]/div[{num}]'
+    _VIDEO_WATCH_LATER_BUTTON = '//*[@al-click="watchLater()"]'
+    _VIDEO_PLAYER = '//*[@id="VideoAutoplayPlayerE"]/div/div[2]/video'
 
     def open(self, relative_url=''):
         raise NotImplemented('Can`t open a video without an id')
@@ -27,3 +23,7 @@ class VideoPage(Page):
         # type: (int) -> None
         super(VideoPage, self).open(str(video_id))
 
+    def toggle_watch_later(self):  # WARNING: MAY CAUSE SIDE EFFECTS
+        wait_and_get_element(self, self._VIDEO_PLAYER).click()
+        wait_and_get_element(self, self._VIDEO_WATCH_LATER_BUTTON).click()
+        wait_and_get_element(self, self._VIDEO_PLAYER).click()
