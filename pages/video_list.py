@@ -26,7 +26,8 @@ class VideoListPage(Page):
 
     _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
-    _VIDEO_ADD_BUTTON = '//div[@class="vl_add-video"]'
+    _VIDEO_UPLOAD_PROGRESS = '//div[@class="progress __dark"]'
+    _VIDEO_ADD_BUTTON = '//div[@class="vl_add-video"]/a[1]'
     _VIDEO_SCROLL_LIST = '//*[@id="layer_main_cnt_scroll"]'
     _VIDEOS = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
     _VIDEO_BY_NUM = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
@@ -41,6 +42,14 @@ class VideoListPage(Page):
 
     def open_my_videos_by_url(self):
         self.open(self.MY_VIDEO_PATH)
+
+    def wait_load(self):
+        wait_and_get_element(self, self._VIDEO_UPLOAD_PROGRESS)
+
+    def wait_noload(self):
+        WebDriverWait(self.driver, constants.LONG_WAIT_TIME).until(
+            expected_conditions.invisibility_of_element_located((By.XPATH, self._VIDEO_UPLOAD_PROGRESS))
+        )
 
     def open_video_upload(self):
         wait_and_get_element(self, self._VIDEO_ADD_BUTTON).click()

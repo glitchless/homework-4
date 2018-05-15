@@ -5,6 +5,7 @@ import unittest
 
 import constants
 from pages.mainpage import MainPage
+from pages.upload import UploadPage
 from pages.video_list import VideoListPage
 from pages.video import VideoPage
 from datetime import datetime
@@ -82,6 +83,7 @@ class VideoTest(unittest.TestCase):
 
         self.assertTrue(video, 'Didn`t load videos on scroll')
 
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_upload_video(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -89,7 +91,12 @@ class VideoTest(unittest.TestCase):
         video_page = VideoListPage(self.driver)
         video_page.open_video_upload()
 
+        upload_page = UploadPage(self.driver)
+        upload_page.upload_file()
+        video_page.wait_load()
+        video_page.wait_noload()
 
+        video_page.wait_and_get_video_by_num(0)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_video_watch_later(self):
