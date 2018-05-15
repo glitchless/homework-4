@@ -1,4 +1,3 @@
-import time
 from os import environ
 from selenium import webdriver
 from selenium.webdriver import ActionChains
@@ -7,11 +6,13 @@ import unittest
 
 import constants
 from pages.mainpage import MainPage
+from pages.upload import UploadPage
 from pages.video_list import VideoListPage
 from pages.video import VideoPage
 from datetime import datetime
 
 from pages.wall import WallPost, VideoSelector
+
 SCREENSHOT_PATH = constants.SCREENSHOT_PATH + '/video/'
 
 
@@ -106,11 +107,25 @@ class VideoTest(unittest.TestCase):
         video_id = video.get_attribute('data-id')
 
         video_list_page.delete_video(video)
-
         video_ids_after_delete = video_list_page.video_ids
 
         self.assertNotIn(video_id, video_ids_after_delete, 'Video was not removed')
         self.assertEqual(video_count_initial, video_list_page.video_count)
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_upload_video(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoListPage(self.driver)
+        video_page.open_video_upload()
+
+        upload_page = UploadPage(self.driver)
+        upload_page.upload_file()
+        video_page.wait_load()
+        video_page.wait_noload()
+
+        video_page.wait_and_get_video_by_num(0)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_video_watch_later(self):

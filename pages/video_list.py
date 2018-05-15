@@ -1,5 +1,4 @@
 # coding=utf-8
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -29,7 +28,8 @@ class VideoListPage(Page):
 
     _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
-    _VIDEO_ADD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
+    _VIDEO_UPLOAD_PROGRESS = '//div[@class="progress __dark"]'
+    _VIDEO_ADD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]/a[1]'
     _VIDEO_SCROLL_LIST = '//*[@id="layer_main_cnt_scroll"]'
     _VIDEOS = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
     _VIDEO_BY_NUM = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
@@ -41,6 +41,21 @@ class VideoListPage(Page):
     @property
     def is_on_myvideos_page(self):
         return bool(filter(lambda url: same_urls(self.driver.current_url, url), self.MY_VIDEO_INNERPATHS))
+
+    def open_my_videos_by_url(self):
+        self.open(self.MY_VIDEO_PATH)
+
+    def open_watchlater(self):
+        self.open_my_videos_by_url()
+        wait_and_get_element(self, self._WATCHLATER_BUTTON).click()
+
+    def wait_load(self):
+        wait_and_get_element(self, self._VIDEO_UPLOAD_PROGRESS)
+
+    def wait_noload(self):
+        WebDriverWait(self.driver, constants.LONG_WAIT_TIME).until(
+            expected_conditions.invisibility_of_element_located((By.XPATH, self._VIDEO_UPLOAD_PROGRESS))
+        )
 
     def open_video_upload(self):
         wait_and_get_element(self, self._VIDEO_ADD_BUTTON).click()
@@ -56,13 +71,6 @@ class VideoListPage(Page):
     def wait_for_load(self):
         self.wait_and_get_hook_block
 
-    @property
-    def video_list(self):
-        if self.is_on_myvideos_page:
-            return wait_and_get_element(self, self._VIDEO_LIST_MYVIDEO)
-
-        return wait_and_get_element(self, self._VIDEO_LIST)
-
     def delete_video(self, video):
         hover = ActionChains(self.driver).move_to_element(video)
         hover.perform()
@@ -70,6 +78,13 @@ class VideoListPage(Page):
 
         delete_button = video.find_element_by_class_name('vl_ic_delete')
         delete_button.click()
+
+    @property
+    def video_list(self):
+        if self.is_on_myvideos_page:
+            return wait_and_get_element(self, self._VIDEO_LIST_MYVIDEO)
+
+        return wait_and_get_element(self, self._VIDEO_LIST)
 
     @awaited_property
     def video_scroll_list(self):
