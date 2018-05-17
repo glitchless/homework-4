@@ -160,6 +160,24 @@ class VideoTest(unittest.TestCase):
                         "{0} !> {1}".format(second_message_count, initial_message_count))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_comment_stream(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoPage(self.driver)
+        video_page_list = VideoListPage(self.driver)
+
+        router.Router().open_live()
+        video_page_list.wait_open_stream()
+
+        video = video_page_list.wait_and_get_video_by_num(0)
+
+        video_page.open_by_id(video.get_attribute('data-id'))
+        video_page.watch_video()
+        video_page.send_comment('Test{0}'.format(self.LOGIN))
+        video_page.find_comment_with_text('Test{0}'.format(self.LOGIN))
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_open_video(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -181,7 +199,7 @@ class VideoTest(unittest.TestCase):
         element = video_page.find_comment_with_text('Test{0}'.format(self.LOGIN))
         video_page.remove_comment(element)
 
-    # @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_open_stream(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -204,7 +222,8 @@ class VideoTest(unittest.TestCase):
         video_page.wait_open_search()
         video_id = int(video_page.wait_and_get_video_by_num(0).get_attribute('data-id'))
         self.assertEquals(video_id, 1691355875,
-                          'First video need be https://ok.ru/video/1691355875 by "Test" request. Not {0}'.format(video_id))
+                          'First video need be https://ok.ru/video/1691355875 by "Test" request. Not {0}'.format(
+                              video_id))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_tab_change(self):
