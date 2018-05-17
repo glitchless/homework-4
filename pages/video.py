@@ -30,6 +30,8 @@ class VideoPage(Page):
     _VIDEO_PAGE_GET_LINK_BUTTON = '//*[@id="VideoAutoplayPlayerE"]/div/div[4]/div[2]'
     _VIDEO_PAGE_GET_LINK_INPUT = '//*[@id="VideoAutoplayPlayerE"]/div/div[7]/div[2]/div[2]/input'
     _VIDEO_PAGE_COMMENTS_BUTTON = '//*[@id="vp_cnt"]/div[1]/div/div[2]/div[2]/ul/li[1]/div/a'
+    _VIDEO_PAGE_LIKE_BUTTON_CONTAINER = '//*[@id="vp_cnt"]/div[1]/div/div[2]/div[2]/ul/li[3]/div/div'
+    _VIDEO_PAGE_LIKE_BUTTON = '//*[@id="vp_cnt"]/div[1]/div/div[2]/div[2]/ul/li[3]/div/div/span'
 
     def wait_for_load(self):
         self.wait_and_get_hook_block
@@ -77,6 +79,12 @@ class VideoPage(Page):
 
     def get_video_id(self):
         return wait_and_get_element(self, self._VIDEO_PAGE_COMMENTS_BUTTON).get_attribute('data-id')
+
+    def get_like_button_container(self):
+        return wait_and_get_element(self, self._VIDEO_PAGE_LIKE_BUTTON_CONTAINER)
+
+    def get_like_button(self):
+        return wait_and_get_element(self, self._VIDEO_PAGE_LIKE_BUTTON)
 
     def watch_video(self):
         return wait_and_get_element(self, self._VIDEO_PLAYER)
