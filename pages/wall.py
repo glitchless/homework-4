@@ -39,7 +39,7 @@ class WallPost(Component):
 
 
 class VideoSelector(Component):
-    _VIDEO_FIRST_BUTTON = '//div[@class="vid-card_cnt"]'
+    _VIDEO_FIRST_BUTTON = '//div[@class="vid-card_img_w"]'
 
     def select_first(self):
         self.video_first_button.click()

@@ -2,12 +2,14 @@
 from page import Page
 from os import environ
 from component import Component
-from utils import wait_and_get_element
+from pages.messages import MessagePage
+from utils import wait_and_get_element, awaited_property
 
 
 class MainPage(Page):
     PATH = ''
     _VIDEOPAGE_BUTTON = '//div[@class="toolbar_nav_a toolbar_nav_a__video"]'
+    _MESSAGE_BUTTON = '//li[@data-l="t,messages"]'
     _NOTE_FIELD = '//div[@class="input_placeholder"]'
 
     def open_note(self):
@@ -15,6 +17,10 @@ class MainPage(Page):
 
     def go_to_videos(self):
         wait_and_get_element(self, self._VIDEOPAGE_BUTTON).click()
+
+    def go_to_message(self):
+        wait_and_get_element(self, self._MESSAGE_BUTTON).click()
+        return MessagePage(self.driver)
 
     def authentificate(self, login=environ['LOGIN'], password=environ['PASSWORD']):
         auth_form = AuthForm(self.driver)

@@ -1,11 +1,13 @@
 # coding=utf-8
+import os
+
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
 from page import Page
-from os import environ
 from component import Component
 from urlparse import urljoin
 import constants
@@ -107,6 +109,7 @@ class VideoListPage(Page):
         _EXTERNAL_UPLOAD_BUTTON = '//*[@id="vvc-filter"]/span[2]'
         _EXTERNAL_LINK_INPUT_FIELD = '//*[@id="hook_Form_VVAddMovieToAlbum"]/form/div[1]/div/div/input'
         _EXTERNAL_UPLOAD_APPROVE_BUTTON = '//*[@id="hook_Form_VVAddMovieToAlbum"]/form/div[3]/button'
+        _VIDEO_UPLOAD = '//*[@id="hook_Block_VideoVitrinaPopupUploader"]/div[4]/div[1]/span'
 
         def open_external_upload_dialog(self):
             wait_and_get_element(self, self._EXTERNAL_UPLOAD_BUTTON).click()
@@ -115,4 +118,20 @@ class VideoListPage(Page):
             wait_and_get_element(self, self._EXTERNAL_LINK_INPUT_FIELD).send_keys(link)
             wait_and_get_element(self, self._EXTERNAL_UPLOAD_APPROVE_BUTTON).click()
 
+        @awaited_property('_VIDEO_UPLOAD')
+        def video_upload(self):
+            pass
 
+        def upload_file(self):
+            root_element = wait_and_get_element(self, self._VIDEO_UPLOAD)
+
+            element = root_element.find_element_by_tag_name('input')
+            element.send_keys(os.getcwd() + '/content/video.mp4')
+
+            # В случае, если браузер не сообщил, мы насильно сообщаем поле ввода, что оно изменилось
+            try:
+                self.driver.execute_script(
+                    'document.evaluate(`{xpath}`, document).iterateNext().dispatchEvent(new Event("change"))'.format(
+                        xpath=self._VIDEO_UPLOAD))
+            except WebDriverException:
+                pass

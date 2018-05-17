@@ -7,7 +7,6 @@ import router
 
 import constants
 from pages.mainpage import MainPage
-from pages.upload import UploadPage
 from pages.video_list import VideoListPage
 from pages.video import VideoPage
 from datetime import datetime
@@ -88,6 +87,7 @@ class VideoTest(unittest.TestCase):
 
         self.assertTrue(video, 'Didn`t load videos on scroll')
 
+    @unittest.skip('WIP')
     def test_external_upload_video_and_delete_video(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -116,20 +116,46 @@ class VideoTest(unittest.TestCase):
         self.assertNotIn(video_id, video_ids_after_delete, 'Video was not removed')
         self.assertEqual(video_count_initial, video_list_page.video_count)
 
-    @unittest.skip('WIP')
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_upload_video(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
         video_page = VideoListPage(self.driver)
-        video_page.open_video_upload_dialog()
 
-        upload_page = UploadPage(self.driver)
+        router.Router().open_my_videos_by_url()
+        video_count_initial = video_page.video_count
+        upload_page = video_page.open_video_upload_dialog()
+
         upload_page.upload_file()
         video_page.wait_load()
         video_page.wait_noload()
 
-        video_page.wait_and_get_video_by_num(0)
+        video_count_second = video_page.video_count
+        video = video_page.wait_and_get_video_by_num(0)
+
+        self.assertEqual(video_count_initial + 1, video_count_second)
+
+        video_page.delete_video(video)
+
+        # TODO: video_count_second = video_page.video_count
+        # TODO: self.assertEqual(video_count_initial, video_count_second)
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_attach_video_message(self):
+        main_page = MainPage(self.driver)
+
+        message_page = main_page.go_to_message()
+        message_page.open_first_dialog()
+
+        selector = message_page.open_video_dialog()
+        selector.select_first()
+
+        initial_message_count = message_page.message_count()
+        message_page.send()
+        second_message_count = message_page.message_count()
+
+        self.assertTrue(second_message_count > initial_message_count)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_video_watch_later(self):
