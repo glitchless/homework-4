@@ -292,7 +292,7 @@ class VideoTest(unittest.TestCase):
         router.Router().open_new()
         video = video_page_list.wait_and_get_video_by_num(0)
 
-        video_id= video.get_attribute('data-id')
+        video_id = video.get_attribute('data-id')
         video_page.open_by_id(video_id)
         video_page.get_video_player().click()
         video_url = video_page.get_video_link()
@@ -301,6 +301,34 @@ class VideoTest(unittest.TestCase):
         video_page = VideoPage(self.driver)
 
         self.assertEqual(video_id, video_page.get_video_id())
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_can_add_and_remove_like(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoPage(self.driver)
+        video_page_list = VideoListPage(self.driver)
+
+        router.Router().open_new()
+        video = video_page_list.wait_and_get_video_by_num(0)
+
+        video_id = video.get_attribute('data-id')
+        video_page.open_by_id(video_id)
+
+        like_button = video_page.get_like_button()
+        like_button.click()
+
+        self.driver.refresh()
+
+        video_page = VideoPage(self.driver)
+
+        like_button_container = video_page.get_like_button_container()
+        entry = '__active' in like_button_container.get_attribute('class')
+
+        video_page.get_like_button().click()
+
+        self.assertTrue(entry)
 
     def tearDown(self):
         main_page = MainPage(self.driver)
