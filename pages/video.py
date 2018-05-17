@@ -33,10 +33,13 @@ class VideoPage(Page):
         super(VideoPage, self).open(str(video_id))
 
     def toggle_watch_later(self):
-        video = wait_and_get_element(self, self._VIDEO_PLAYER)
+        video = self.watch_video()
         hover = ActionChains(self.driver).move_to_element(video)
         hover.perform()
         wait_and_get_element(self, self._VIDEO_WATCH_LATER_BUTTON).click()
+
+    def watch_video(self):
+        return wait_and_get_element(self, self._VIDEO_PLAYER)
 
     @awaited_property('_HOOK_BLOCK')
     def wait_and_get_hook_block(self):  # то же, что и выше

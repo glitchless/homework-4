@@ -20,6 +20,7 @@ class VideoListPage(Page):
 
     MY_VIDEO_PATH = 'myVideo/'
     WATCH_LATER_PATH = 'watchLater/'
+    NEW_PATH = 'new/'
     SEARCH_PATH = 'search/'
 
     _FILE_UPLOAD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
@@ -39,6 +40,7 @@ class VideoListPage(Page):
     _VIDEOS_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
     _VIDEO_BY_NUM_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
     _VIDEO_BY_NUM_SEARCH = '//*[@data-fetch-type="search"]/*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
+    _VIDEO_BY_NUM_NEW = '//*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
 
     def wait_load(self):
         wait_and_get_element(self, self._VIDEO_UPLOAD_PROGRESS)
@@ -91,7 +93,12 @@ class VideoListPage(Page):
                                         self._VIDEO_BY_NUM_MYVIDEO.format(num=num + 1))  # нумерация в xpath с единицы
 
         if router.Router().is_on_search_page:
-            return wait_and_get_element(self, self._VIDEO_BY_NUM_SEARCH.format(num=num + 1))
+            return wait_and_get_element(self,
+                                        self._VIDEO_BY_NUM_SEARCH.format(num=num + 1))
+
+        if router.Router().is_on_new_page:
+            return wait_and_get_element(self,
+                                        self._VIDEO_BY_NUM_NEW.format(num=num + 1))
 
         return wait_and_get_element(self, self._VIDEO_BY_NUM.format(num=num + 1))  # нумерация в xpath с единицы
 

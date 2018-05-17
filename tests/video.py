@@ -159,6 +159,19 @@ class VideoTest(unittest.TestCase):
         self.assertTrue(second_message_count > initial_message_count)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_open_video(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoPage(self.driver)
+        video_page_list = VideoListPage(self.driver)
+
+        router.Router().open_new()
+        video = video_page_list.wait_and_get_video_by_num(0)
+        video_page.open_by_id(video.get_attribute('data-id'))
+        video_page.watch_video()
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_search(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()

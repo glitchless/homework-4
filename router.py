@@ -46,6 +46,10 @@ class Router(object):
     def is_on_search_page(self):
         return same_urls(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.SEARCH_PATH)
 
+    @property
+    def is_on_new_page(self):
+        return same_urls(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.NEW_PATH)
+
     def open_my_videos_by_url(self):
         self.open(VideoListPage.MY_VIDEO_PATH, VideoListPage)
 
