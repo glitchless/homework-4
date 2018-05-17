@@ -22,6 +22,7 @@ class VideoListPage(Page):
     WATCH_LATER_PATH = 'watchLater/'
     NEW_PATH = 'new/'
     SEARCH_PATH = 'search/'
+    LIVE_PATH = 'live/'
 
     _FILE_UPLOAD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
     _CONFIRM_ACTION_BUTTON = '//*[@id="vv-confirm-form"]/div[2]/input'
@@ -96,7 +97,7 @@ class VideoListPage(Page):
             return wait_and_get_element(self,
                                         self._VIDEO_BY_NUM_SEARCH.format(num=num + 1))
 
-        if router.Router().is_on_new_page:
+        if router.Router().is_on_new_page or router.Router().is_on_live_page:
             return wait_and_get_element(self,
                                         self._VIDEO_BY_NUM_NEW.format(num=num + 1))
 
