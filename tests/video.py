@@ -1,3 +1,4 @@
+# coding=utf-8
 from os import environ
 from selenium import webdriver
 from selenium.webdriver import ActionChains
@@ -156,6 +157,35 @@ class VideoTest(unittest.TestCase):
         second_message_count = message_page.message_count()
 
         self.assertTrue(second_message_count > initial_message_count)
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_tab_change(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        router.Router().open_top()
+        self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'top'))
+
+        router.Router().open_liveapp()
+        self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'liveApp'))
+
+        router.Router().open_new()
+        self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'new'))
+
+        router.Router().open_live()
+        self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'live'))
+
+        router.Router().open_suggest()
+        self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'suggestedAlbums'))
+
+        router.Router().open_catalog()
+        self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'channels'))
+
+        router.Router().open_my_videos()
+        self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'myVideo'))
+
+        router.Router().open_subscriptions()
+        self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'subscriptions'))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_video_watch_later(self):

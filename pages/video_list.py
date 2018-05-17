@@ -23,7 +23,7 @@ class VideoListPage(Page):
 
     _FILE_UPLOAD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
     _CONFIRM_ACTION_BUTTON = '//*[@id="vv-confirm-form"]/div[2]/input'
-
+    _VIDEO_TAB_TITLE = '//div[@class="mml_ucard_n_g"]'
     _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
     _VIDEO_UPLOAD_PROGRESS = '//div[@class="progress __dark"]'
@@ -96,6 +96,12 @@ class VideoListPage(Page):
             return self.driver.find_elements_by_xpath(self._VIDEOS_MYVIDEO)
 
         return self.driver.find_elements_by_xpath(self._VIDEOS)
+
+    def get_tab_naming(self):
+        #WebDriverWait(self.driver, constants.LONG_WAIT_TIME).until(
+        #    expected_conditions.text_to_be_present_in_element((By.XPATH, self._VIDEO_TAB_TITLE))
+        #)
+        return wait_and_get_element(self, self._VIDEO_TAB_TITLE).text.decode('utf-8')
 
     @property
     def video_count(self):

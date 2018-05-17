@@ -24,6 +24,14 @@ class Router(object):
             self.driver = driver
 
     _WATCHLATER_BUTTON = '//*[@id="vv_btn_watchLater"]'
+    _MYWIDEO_BUTTON = '//a[@id="vv_btn_myVideo"]'
+    _TOP_BUTTON = '//a[@id="vv_btn_top"]'
+    _LIVEAPP_BUTTON = '//a[@id="vv_btn_liveApp"]'
+    _NEW_BUTTON = '//a[@id="vv_btn_new"]'
+    _LIVE_BUTTON = '//a[@id="vv_btn_live"]'
+    _SUGGEST_BUTTON = '//a[@id="vv_btn_suggestedAlbums"]'
+    _CATALOG_BUTTON = '//a[@id="vv_btn_channels"]'
+    _SUBSCRIPTIONS_BUTTON = '//a[@id="vv_btn_subscriptions"]'
 
     MY_VIDEO_INNERPATHS = [
         urljoin(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.MY_VIDEO_PATH),
@@ -36,6 +44,30 @@ class Router(object):
 
     def open_my_videos_by_url(self):
         self.open(VideoListPage.MY_VIDEO_PATH, VideoListPage)
+
+    def open_my_videos(self):
+        wait_and_get_element(self, self._MYWIDEO_BUTTON).click()
+
+    def open_top(self):
+        wait_and_get_element(self, self._TOP_BUTTON).click()
+
+    def open_liveapp(self):
+        wait_and_get_element(self, self._LIVEAPP_BUTTON).click()
+
+    def open_suggest(self):
+        wait_and_get_element(self, self._SUGGEST_BUTTON).click()
+
+    def open_new(self):
+        wait_and_get_element(self, self._NEW_BUTTON).click()
+
+    def open_catalog(self):
+        wait_and_get_element(self, self._CATALOG_BUTTON).click()
+
+    def open_subscriptions(self):
+        wait_and_get_element(self, self._SUBSCRIPTIONS_BUTTON).click()
+
+    def open_live(self):
+        wait_and_get_element(self, self._LIVE_BUTTON).click()
 
     def open_watchlater(self):
         self.open_my_videos_by_url()
