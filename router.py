@@ -1,10 +1,12 @@
 from urlparse import urljoin
 
+from selenium.common.exceptions import StaleElementReferenceException
+
 from constants import BASE_URL
 from pages.component import Component
 from pages.page import Page
 from pages.video_list import VideoListPage
-from utils import wait_and_get_element, same_urls
+from utils import wait_and_get_element, same_urls, start_with_url
 
 
 class Singleton(type):
@@ -44,15 +46,22 @@ class Router(object):
 
     @property
     def is_on_search_page(self):
-        return same_urls(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.SEARCH_PATH)
+        return same_urls(self.driver.current_url,
+                         urljoin(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.SEARCH_PATH))
 
     @property
     def is_on_new_page(self):
-        return same_urls(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.NEW_PATH)
+        return same_urls(self.driver.current_url,
+                         urljoin(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.NEW_PATH))
+
+    @property
+    def is_stream(self):
+        return start_with_url(self.driver.current_url, urljoin(VideoListPage.BASE_URL, VideoListPage.PATH_LIVE))
 
     @property
     def is_on_live_page(self):
-        return same_urls(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.LIVE_PATH)
+        return same_urls(self.driver.current_url,
+                         urljoin(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.LIVE_PATH))
 
     def open_my_videos_by_url(self):
         self.open(VideoListPage.MY_VIDEO_PATH, VideoListPage)
@@ -84,7 +93,10 @@ class Router(object):
     def open_watchlater(self):
         self.open_my_videos_by_url()
         wait_and_get_element(self, self._WATCHLATER_BUTTON).click()
-        wait_and_get_element(self, self._WATCHLATER_BUTTON).click()  # HI OK devs
+        try:
+            wait_and_get_element(self, self._WATCHLATER_BUTTON).click()  # HI OK devs
+        except StaleElementReferenceException:
+            pass
 
     def open(self, relative_url='', page=None):
         # type: (str, Page) -> None

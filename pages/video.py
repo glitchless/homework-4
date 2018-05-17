@@ -21,8 +21,9 @@ class VideoPage(Page):
     _VIDEO_UPLOAD_BUTTON = '//div[@class="vl_add-video"]'
     _VIDEO_WATCH_LATER_BUTTON = '//*[@al-click="watchLater()"]'
     _VIDEO_COMMENTS = '//div[@class="comments_lst_cnt"]/div'
-    _VIDEO_COMMENT_TEXT = '//div[@class="comments_text textWrap"]/div'
+    _VIDEO_COMMENT_TEXT = './/div[@class="comments_text textWrap"]/div'
     _VIDEO_COMMENT_FIELD = '//div[@data-l="t,ta"]'
+    _STREAM_COMMENT_FIELD = '//div[@class="it vp-chat_it"]'
     _VIDEO_COMMENT_BUTTON = '//button[@data-l="t,submit"]'
     _REMOVE_COMMENT_BUTTON = '//a[@class="fade-on-hover comments_remove ic10 ic10_close-g"]'
     _VIDEO_PLAYER = '//*[@id="VideoAutoplayPlayerE"]/div/div[2]/video'
@@ -45,8 +46,10 @@ class VideoPage(Page):
 
     def find_comment_with_text(self, text):
         for element in self.driver.find_elements_by_xpath(self._VIDEO_COMMENTS):
-            if element.find_element_by_xpath(self._VIDEO_COMMENT_TEXT).text == text:
+            comment = element.find_element_by_xpath(self._VIDEO_COMMENT_TEXT)
+            if comment.text == text:
                 return element
+        return self.find_comment_with_text(text)
 
     def open_by_id(self, video_id):
         # type: (int) -> None

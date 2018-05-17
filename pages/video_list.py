@@ -17,6 +17,7 @@ from utils import awaited_property, wait_and_get_element, same_urls
 
 class VideoListPage(Page):
     PATH = 'video/'
+    PATH_LIVE = 'live/'
 
     MY_VIDEO_PATH = 'myVideo/'
     WATCH_LATER_PATH = 'watchLater/'
@@ -35,12 +36,12 @@ class VideoListPage(Page):
     _VIDEO_ADD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
     _VIDEO_SCROLL_LIST = '//*[@id="layer_main_cnt_scroll"]'
     _VIDEOS = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
-    _VIDEO_BY_NUM = '//*[@id="vv_main_content"]/div/div/div[1]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
+    _VIDEO_BY_NUM = '//div[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
 
     _VIDEO_LIST_MYVIDEO = '//*[@id="vv_main_content"]/div/div'
     _VIDEOS_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
     _VIDEO_BY_NUM_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
-    _VIDEO_BY_NUM_SEARCH = '//*[@data-fetch-type="search"]/*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
+    _VIDEO_BY_NUM_SEARCH = '//*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
     _VIDEO_BY_NUM_NEW = '//*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
 
     def wait_load(self):

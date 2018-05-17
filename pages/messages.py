@@ -5,7 +5,7 @@ from utils import wait_and_get_element
 
 class MessagePage(Page):
     _DIALOG_BUTTON = '//a[@class="chats_i_ovr"]'
-    _ATTACH_BUTTON = '//div[@class="comments_attach_trigger_ic ic_staple"]'
+    _ATTACH_BUTTON = '//span[@class="comments_attach_trigger __new"]'
     _ATTACH_MENU = '//div[@class="sc-menu sc-menu__top"]'
     _VIDEO_ADD_BUTTON = '//a[@data-l="t,videoLink"]'
     _DIALOG_FIELD = '//div[@class="js-messages-list"]/div/div'

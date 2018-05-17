@@ -57,3 +57,7 @@ def canonical_url(u):
 
 def same_urls(u1, u2):
     return canonical_url(u1) == canonical_url(u2)
+
+
+def start_with_url(u1, u2):
+    return canonical_url(u1).startswith(canonical_url(u2))
