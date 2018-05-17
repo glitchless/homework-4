@@ -40,12 +40,27 @@ class VideoListPage(Page):
 
     _VIDEO_LIST_MYVIDEO = '//*[@id="vv_main_content"]/div/div'
     _VIDEOS_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
+    _STREAM_STATUS = './/div[@class="vid-card_live __active"]'
     _VIDEO_BY_NUM_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
     _VIDEO_BY_NUM_SEARCH = '//*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
     _VIDEO_BY_NUM_NEW = '//*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
 
     def wait_load(self):
         wait_and_get_element(self, self._VIDEO_UPLOAD_PROGRESS)
+
+    def wait_open_stream(self):
+        WebDriverWait(self.driver, constants.WAIT_TIME).until(VideoListPage.open_stream())
+
+    class open_stream(object):
+        def __call__(self, driver):
+            video_list = VideoListPage(driver)
+
+            try:
+                video = video_list.wait_and_get_video_by_num(0)
+                video.find_element_by_class_name('vid-card_live')
+            except WebDriverException:
+                return False
+            return True
 
     def wait_noload(self):
         WebDriverWait(self.driver, constants.LONG_WAIT_TIME).until(
@@ -88,6 +103,13 @@ class VideoListPage(Page):
     @awaited_property('_HOOK_BLOCK')
     def wait_and_get_hook_block(self):
         pass
+
+    def check_stream_is_online(self, element):
+        try:
+            self.driver.find_element_by_xpath(self._STREAM_STATUS)
+            return True
+        except WebDriverException:
+            return False
 
     def wait_and_get_video_by_num(self, num):
         if router.Router().is_on_myvideos_page:
