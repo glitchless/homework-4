@@ -27,6 +27,9 @@ class VideoPage(Page):
     _VIDEO_COMMENT_BUTTON = '//button[@data-l="t,submit"]'
     _REMOVE_COMMENT_BUTTON = '//a[@class="fade-on-hover comments_remove ic10 ic10_close-g"]'
     _VIDEO_PLAYER = '//*[@id="VideoAutoplayPlayerE"]/div/div[2]/video'
+    _VIDEO_PAGE_GET_LINK_BUTTON = '//*[@id="VideoAutoplayPlayerE"]/div/div[4]/div[2]'
+    _VIDEO_PAGE_GET_LINK_INPUT = '//*[@id="VideoAutoplayPlayerE"]/div/div[7]/div[2]/div[2]/input'
+    _VIDEO_PAGE_COMMENTS_BUTTON = '//*[@id="vp_cnt"]/div[1]/div/div[2]/div[2]/ul/li[1]/div/a'
 
     def wait_for_load(self):
         self.wait_and_get_hook_block
@@ -60,6 +63,20 @@ class VideoPage(Page):
         hover = ActionChains(self.driver).move_to_element(video)
         hover.perform()
         wait_and_get_element(self, self._VIDEO_WATCH_LATER_BUTTON).click()
+
+    def get_video_player(self):
+        return wait_and_get_element(self, self._VIDEO_PLAYER)
+
+    def get_video_link(self):
+        video_player = wait_and_get_element(self, self._VIDEO_PLAYER)
+        hover = ActionChains(self.driver).move_to_element(video_player)
+        hover.perform()
+
+        wait_and_get_element(self, self._VIDEO_PAGE_GET_LINK_BUTTON).click()
+        return wait_and_get_element(self, self._VIDEO_PAGE_GET_LINK_INPUT).get_attribute('value')
+
+    def get_video_id(self):
+        return wait_and_get_element(self, self._VIDEO_PAGE_COMMENTS_BUTTON).get_attribute('data-id')
 
     def watch_video(self):
         return wait_and_get_element(self, self._VIDEO_PLAYER)

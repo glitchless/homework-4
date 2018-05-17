@@ -181,7 +181,7 @@ class VideoTest(unittest.TestCase):
         element = video_page.find_comment_with_text('Test{0}'.format(self.LOGIN))
         video_page.remove_comment(element)
 
-    # @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_open_stream(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -261,6 +261,27 @@ class VideoTest(unittest.TestCase):
 
         self.assertIn(self.TEST_VIDEO_ID, video_list_page.video_ids,
                       'Didn`t add video to watch later page on marking it watch later')
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_video_get_link(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoPage(self.driver)
+        video_page_list = VideoListPage(self.driver)
+
+        router.Router().open_new()
+        video = video_page_list.wait_and_get_video_by_num(0)
+
+        video_id= video.get_attribute('data-id')
+        video_page.open_by_id(video_id)
+        video_page.get_video_player().click()
+        video_url = video_page.get_video_link()
+
+        self.driver.get(video_url)
+        video_page = VideoPage(self.driver)
+
+        self.assertEqual(video_id, video_page.get_video_id())
 
     def tearDown(self):
         main_page = MainPage(self.driver)
