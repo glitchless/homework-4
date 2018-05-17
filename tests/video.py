@@ -172,6 +172,15 @@ class VideoTest(unittest.TestCase):
         video_page.watch_video()
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_comment_video(self):
+        video_page = VideoPage(self.driver)
+        video_page.open_by_id(self.TEST_VIDEO_ID)
+
+        video_page.send_comment('Test')
+        element = video_page.find_comment_with_text('Test')
+        video_page.remove_comment(element)
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_open_stream(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
