@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
+import router
 from page import Page
 from os import environ
 from component import Component
@@ -22,8 +23,11 @@ class VideoPage(Page):
     _VIDEO_WATCH_LATER_BUTTON = '//*[@al-click="watchLater()"]'
     _VIDEO_COMMENTS = '//div[@class="comments_lst_cnt"]/div'
     _VIDEO_COMMENT_TEXT = './/div[@class="comments_text textWrap"]/div'
+    _STREAM_COMMENT_TEXT = './/div[@class="vp-chat_i_tx textWrap"]'
     _VIDEO_COMMENT_FIELD = '//div[@data-l="t,ta"]'
     _STREAM_COMMENT_FIELD = '//div[@class="it vp-chat_it"]'
+    _STREAM_COMMENTS = '//div[@class="vp-chat_cnt"]/div'
+    _STREAM_COMMENT_BUTTON = '//button[@class="button-pro vp-chat_send"]'
     _VIDEO_COMMENT_BUTTON = '//button[@data-l="t,submit"]'
     _REMOVE_COMMENT_BUTTON = '//a[@class="fade-on-hover comments_remove ic10 ic10_close-g"]'
     _VIDEO_PLAYER = '//*[@id="VideoAutoplayPlayerE"]/div/div[2]/video'
@@ -40,6 +44,11 @@ class VideoPage(Page):
         raise NotImplemented('Can`t open a video without an id')
 
     def send_comment(self, text):
+        if router.Router().is_stream:
+            wait_and_get_element(self, self._STREAM_COMMENT_FIELD).send_keys(text)
+            wait_and_get_element(self, self._STREAM_COMMENT_BUTTON).click()
+            return
+
         wait_and_get_element(self, self._VIDEO_COMMENT_FIELD).send_keys(text)
         wait_and_get_element(self, self._VIDEO_COMMENT_BUTTON).click()
 
@@ -50,8 +59,16 @@ class VideoPage(Page):
         remove_button.click()
 
     def find_comment_with_text(self, text):
-        for element in self.driver.find_elements_by_xpath(self._VIDEO_COMMENTS):
-            comment = element.find_element_by_xpath(self._VIDEO_COMMENT_TEXT)
+        xpath_comment = self._VIDEO_COMMENTS
+        if router.Router().is_stream:
+            xpath_comment = self._STREAM_COMMENTS
+
+        xpath_comment_text = self._VIDEO_COMMENT_TEXT
+        if router.Router().is_stream:
+            xpath_comment_text = self._STREAM_COMMENT_TEXT
+
+        for element in self.driver.find_elements_by_xpath(xpath_comment):
+            comment = element.find_element_by_xpath(xpath_comment_text)
             if comment.text == text:
                 return element
         return self.find_comment_with_text(text)
@@ -87,7 +104,7 @@ class VideoPage(Page):
         return wait_and_get_element(self, self._VIDEO_PAGE_LIKE_BUTTON)
 
     def watch_video(self):
-        return wait_and_get_element(self, self._VIDEO_PLAYER)
+        return wait_and_get_element(self, self._VIDEO_PLAYER, True, True)
 
     @awaited_property('_HOOK_BLOCK')
     def wait_and_get_hook_block(self):  # то же, что и выше
