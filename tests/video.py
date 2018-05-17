@@ -159,6 +159,17 @@ class VideoTest(unittest.TestCase):
         self.assertTrue(second_message_count > initial_message_count)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_search(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoListPage(self.driver)
+        video_page.search('Test')
+        video_page.wait_open_search()
+        self.assertEquals(video_page.wait_and_get_video_by_num(0).get_attribute('data-id'), 1691355875,
+                          'First video need be https://ok.ru/video/1691355875 by "Test" request')
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_tab_change(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()

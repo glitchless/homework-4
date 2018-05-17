@@ -20,11 +20,14 @@ class VideoListPage(Page):
 
     MY_VIDEO_PATH = 'myVideo/'
     WATCH_LATER_PATH = 'watchLater/'
+    SEARCH_PATH = 'search/'
 
     _FILE_UPLOAD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
     _CONFIRM_ACTION_BUTTON = '//*[@id="vv-confirm-form"]/div[2]/input'
     _VIDEO_TAB_TITLE = '//div[@class="mml_ucard_n_g"]'
     _HOOK_BLOCK = '//*[@id="hook_Block_VideoVitrinaContent"]'
+    _VIDEO_SEARCH_FIELD = '//input[@class="search-input_it it"]'
+    _VIDEO_SEARCH_DIV = '//*[@data-fetch-type="search"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
     _VIDEO_UPLOAD_PROGRESS = '//div[@class="progress __dark"]'
     _VIDEO_ADD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
@@ -35,6 +38,7 @@ class VideoListPage(Page):
     _VIDEO_LIST_MYVIDEO = '//*[@id="vv_main_content"]/div/div'
     _VIDEOS_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")]'
     _VIDEO_BY_NUM_MYVIDEO = '//*[@id="vv_main_content"]/div/div/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
+    _VIDEO_BY_NUM_SEARCH = '//*[@data-fetch-type="search"]/*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
 
     def wait_load(self):
         wait_and_get_element(self, self._VIDEO_UPLOAD_PROGRESS)
@@ -50,6 +54,9 @@ class VideoListPage(Page):
 
     def confirm_action(self):
         wait_and_get_element(self, self._CONFIRM_ACTION_BUTTON).click()
+
+    def wait_open_search(self):
+        wait_and_get_element(self, self._VIDEO_SEARCH_DIV)
 
     def wait_for_load(self):
         self.wait_and_get_hook_block
@@ -83,6 +90,9 @@ class VideoListPage(Page):
             return wait_and_get_element(self,
                                         self._VIDEO_BY_NUM_MYVIDEO.format(num=num + 1))  # нумерация в xpath с единицы
 
+        if router.Router().is_on_search_page:
+            return wait_and_get_element(self, self._VIDEO_BY_NUM_SEARCH.format(num=num + 1))
+
         return wait_and_get_element(self, self._VIDEO_BY_NUM.format(num=num + 1))  # нумерация в xpath с единицы
 
     def scroll_videos_to(self, y):
@@ -97,11 +107,8 @@ class VideoListPage(Page):
 
         return self.driver.find_elements_by_xpath(self._VIDEOS)
 
-    def get_tab_naming(self):
-        #WebDriverWait(self.driver, constants.LONG_WAIT_TIME).until(
-        #    expected_conditions.text_to_be_present_in_element((By.XPATH, self._VIDEO_TAB_TITLE))
-        #)
-        return wait_and_get_element(self, self._VIDEO_TAB_TITLE).text.decode('utf-8')
+    def search(self, text):
+        wait_and_get_element(self, self._VIDEO_SEARCH_FIELD).send_keys(text)
 
     @property
     def video_count(self):

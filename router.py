@@ -42,6 +42,10 @@ class Router(object):
     def is_on_myvideos_page(self):
         return bool(filter(lambda url: same_urls(self.driver.current_url, url), self.MY_VIDEO_INNERPATHS))
 
+    @property
+    def is_on_search_page(self):
+        return same_urls(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.SEARCH_PATH)
+
     def open_my_videos_by_url(self):
         self.open(VideoListPage.MY_VIDEO_PATH, VideoListPage)
 
