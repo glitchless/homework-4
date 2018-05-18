@@ -34,6 +34,9 @@ def wait_and_get_property(self, attr_name, wait_for_visibility=True):
 
 
 def wait_text(self, xpath, text):
+    """
+    author: LionZXY
+    """
     WebDriverWait(self.driver, constants.WAIT_TIME).until(
         expected_conditions.text_to_be_present_in_element((By.XPATH, xpath), text)
     )

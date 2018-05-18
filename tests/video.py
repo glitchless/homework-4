@@ -60,6 +60,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_post_video(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
         main_page.open_note()
 
@@ -182,6 +185,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_upload_video(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -202,11 +208,11 @@ class VideoTest(unittest.TestCase):
 
         video_page.delete_video(video)
 
-        # TODO: video_count_second = video_page.video_count
-        # TODO: self.assertEqual(video_count_initial, video_count_second)
-
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_attach_video_message(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
 
         message_page = main_page.go_to_message()
@@ -224,6 +230,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_comment_stream(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -242,6 +251,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_open_video(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -255,6 +267,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_subscription(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -284,8 +299,11 @@ class VideoTest(unittest.TestCase):
         self.assertEqual(initial_count - 1, second_count,
                          "Not equals: {0} - 1 != {1}".format(initial_count, second_count))
 
-    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    #@unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_comment_video(self):
+        """
+        author: LionZXY
+        """
         video_page = VideoPage(self.driver)
         video_page.open_by_id(self.TEST_VIDEO_ID)
 
@@ -295,6 +313,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_open_stream(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -308,6 +329,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_search(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -321,6 +345,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_tab_change(self):
+        """
+        author: LionZXY
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 

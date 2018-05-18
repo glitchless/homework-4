@@ -67,34 +67,58 @@ class Router(object, metaclass=Singleton):
         self.open(VideoListPage.MY_VIDEO_PATH, VideoListPage)
 
     def open_my_videos(self):
+        """
+        author: LionZXY
+        """
         wait_and_get_element(self, self._MYWIDEO_BUTTON).click()
         wait_text(self, self._TAB_NAME_TEXT, "Моё видео")
 
     def open_top(self):
+        """
+        author: LionZXY
+        """
         wait_and_get_element(self, self._TOP_BUTTON).click()
         wait_text(self, self._TAB_NAME_TEXT, "Топ недели")
 
     def open_liveapp(self):
+        """
+        author: LionZXY
+        """
         wait_and_get_element(self, self._LIVEAPP_BUTTON).click()
         wait_text(self, self._TAB_NAME_TEXT, "OK Live")
 
     def open_suggest(self):
+        """
+        author: LionZXY
+        """
         wait_and_get_element(self, self._SUGGEST_BUTTON).click()
         wait_text(self, self._TAB_NAME_TEXT, "Популярное")
 
     def open_new(self):
+        """
+        author: LionZXY
+        """
         wait_and_get_element(self, self._NEW_BUTTON).click()
         wait_text(self, self._TAB_NAME_TEXT, "Новинки")
 
     def open_catalog(self):
+        """
+        author: LionZXY
+        """
         wait_and_get_element(self, self._CATALOG_BUTTON).click()
         wait_text(self, self._TAB_NAME_TEXT, "Каталог")
 
     def open_subscriptions(self):
+        """
+        author: LionZXY
+        """
         wait_and_get_element(self, self._SUBSCRIPTIONS_BUTTON).click()
         wait_text(self, self._TAB_NAME_TEXT, "Мои подписки")
 
     def open_live(self):
+        """
+        author: LionZXY
+        """
         wait_and_get_element(self, self._LIVE_BUTTON).click()
         wait_text(self, self._TAB_NAME_TEXT, "Прямой эфир")
 
