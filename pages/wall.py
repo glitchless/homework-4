@@ -19,7 +19,6 @@ class WallPost(Component):
 
     # Говнофикс бага с не кликающим элементом
     def open_video_select_dialog(self):
-        print('open_video_select_dialog')
         not_open = True
         one_execute = False  # Проверка что хотя бы один раз элемент проверился
 
