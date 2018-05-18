@@ -73,6 +73,24 @@ class VideoTest(unittest.TestCase):
         wall_post.post()
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_post_multiple_videos(self):
+        main_page = MainPage(self.driver)
+        main_page.open_note()
+
+        wall_post = WallPost(self.driver)
+
+        expected_video_count = 2
+        for i in range(expected_video_count):
+            wall_post.open_video_select_dialog()
+            video_selector = VideoSelector(self.driver)
+            video_selector.select_first()
+
+        wall_post.check_exist_video()
+        added_videos_count = wall_post.get_added_blocks_count()
+
+        self.assertTrue(added_videos_count == expected_video_count)
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_scrolling_loads_videos(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
