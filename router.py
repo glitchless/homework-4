@@ -70,21 +70,27 @@ class Router(object):
 
     def open_my_videos(self):
         wait_and_get_element(self, self._MYWIDEO_BUTTON).click()
+        wait_text(self, self._TAB_NAME_TEXT, u"Моё видео")
 
     def open_top(self):
         wait_and_get_element(self, self._TOP_BUTTON).click()
+        wait_text(self, self._TAB_NAME_TEXT, u"Топ недели")
 
     def open_liveapp(self):
         wait_and_get_element(self, self._LIVEAPP_BUTTON).click()
+        wait_text(self, self._TAB_NAME_TEXT, u"OK Live")
 
     def open_suggest(self):
         wait_and_get_element(self, self._SUGGEST_BUTTON).click()
+        wait_text(self, self._TAB_NAME_TEXT, u"Популярное")
 
     def open_new(self):
         wait_and_get_element(self, self._NEW_BUTTON).click()
+        wait_text(self, self._TAB_NAME_TEXT, u"Новинки")
 
     def open_catalog(self):
         wait_and_get_element(self, self._CATALOG_BUTTON).click()
+        wait_text(self, self._TAB_NAME_TEXT, u"Каталог")
 
     def open_subscriptions(self):
         wait_and_get_element(self, self._SUBSCRIPTIONS_BUTTON).click()
