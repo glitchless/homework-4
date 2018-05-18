@@ -86,8 +86,6 @@ class VideoListPage(Page):
         self.wait_and_get_hook_block
 
     def delete_video(self, video):
-        hidden_panel = video.find_element_by_class_name('vid-card_ac-aux')
-
         delete_button = video.find_element_by_class_name('vl_ic_delete')
         self.driver.execute_script('arguments[0].click();', delete_button)
         # clicking the button that is wrapped into hidden elements like a freaking chicken roll TODO: maybe refactor

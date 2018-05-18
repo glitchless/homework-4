@@ -22,7 +22,8 @@ class VideoTest(unittest.TestCase):
     LOGIN = environ['LOGIN']  # type: strТ
     PASSWORD = environ['PASSWORD']  # type: str
     driver = None  # type: webdriver.Remote
-    TEST_VIDEO_ID = 566094269061
+    TEST_VIDEO_ID = 1218311298643
+    TEST_VIDEO_ID_2 = 979444637425
     TEST_EXTERNAL_VIDEO_LINK = 'https://www.youtube.com/watch?v=OPf0YbXqDm0'
 
     @classmethod
@@ -171,6 +172,7 @@ class VideoTest(unittest.TestCase):
     def test_scrolling_loads_videos(self):
         """
         Автор: Ansile
+        Описание: Проверяем, что при скролле списка видео он прогружает новые видео
         """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -191,6 +193,7 @@ class VideoTest(unittest.TestCase):
     def test_external_upload_video_and_delete_video(self):
         """
         Автор: Ansile
+        Описание: Проверяем, что можно загрузить видео по внешней ссылке и удалить его
         """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -212,13 +215,72 @@ class VideoTest(unittest.TestCase):
         video = video_list_page.wait_and_get_video_by_num(0)
 
         self.assertEqual(video_count_initial + 1, video_list_page.video_count, 'Video wasn`t added')
-        video_id = video.get_attribute('data-id')
+        # не заворачиваем в subTest, чтобы прекращалось выполнение, если произошла ошибка
 
-        video_list_page.delete_video(video)
-        video_ids_after_delete = video_list_page.video_ids
+        with self.subTest('Удаление видео'):
+            video_id = video.get_attribute('data-id')
 
-        self.assertNotIn(video_id, video_ids_after_delete, 'Video was not removed')
-        self.assertEqual(video_count_initial, video_list_page.video_count)
+            video_list_page.delete_video(video)
+            video_ids_after_delete = video_list_page.video_ids
+
+            self.assertNotIn(video_id, video_ids_after_delete, 'Video was not removed')
+            self.assertEqual(video_count_initial, video_list_page.video_count)
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    @print_test_info
+    def test_watched_video_is_added_to_history(self):
+        """
+        Автор: Ansile
+        Описание: Проверяем, что при просмотре видео оно добавляется в список просмотренных
+        """
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        with self.subTest('Не смотрим видео, уходим сразу'):
+            video_list_page = VideoListPage(self.driver)
+
+            router.Router().open_history()
+
+            test_video_id = self.TEST_VIDEO_ID
+
+            last_watched_video = video_list_page.wait_and_get_video_by_num(0)
+
+            if last_watched_video.get_attribute('data-id') == test_video_id:
+                test_video_id = self.TEST_VIDEO_ID_2  # make sure our video isn't already on top of last watched
+
+            video_page = VideoPage(self.driver)
+
+            video_page.open_by_id(test_video_id)
+
+            router.Router().open_history()
+
+            last_watched_video = video_list_page.wait_and_get_video_by_num(0)
+
+            self.assertNotEqual(last_watched_video.get_attribute('data-id'), test_video_id)
+
+        with self.subTest('Смотрим видео'):
+            video_list_page = VideoListPage(self.driver)
+
+            router.Router().open_history()
+
+            test_video_id = self.TEST_VIDEO_ID
+
+            last_watched_video = video_list_page.wait_and_get_video_by_num(0)
+
+            if last_watched_video.get_attribute('data-id') == test_video_id:
+                test_video_id = self.TEST_VIDEO_ID_2  # make sure our video isn't already on top of last watched
+
+            video_page = VideoPage(self.driver)
+
+            video_page.open_by_id(test_video_id)
+
+            video_page.watch_video()
+
+            router.Router().open_history()
+
+            last_watched_video = video_list_page.wait_and_get_video_by_num(0)
+
+            self.assertEqual(int(last_watched_video.get_attribute('data-id')), test_video_id)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     @print_test_info

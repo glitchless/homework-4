@@ -34,6 +34,7 @@ class Router(object, metaclass=Singleton):
     _CATALOG_BUTTON = '//a[@id="vv_btn_channels"]'
     _TAB_NAME_TEXT = '//div[@class="mml_ucard_n_g"]'
     _SUBSCRIPTIONS_BUTTON = '//a[@id="vv_btn_subscriptions"]'
+    _HISTORY_BUTTON = '//*[@id="vv_btn_history"]'
 
     MY_VIDEO_INNERPATHS = [
         urljoin(urljoin(VideoListPage.BASE_URL, VideoListPage.PATH), VideoListPage.MY_VIDEO_PATH),
@@ -127,6 +128,14 @@ class Router(object, metaclass=Singleton):
         wait_and_get_element(self, self._WATCHLATER_BUTTON).click()
         try:
             wait_and_get_element(self, self._WATCHLATER_BUTTON).click()  # HI OK devs
+        except StaleElementReferenceException:
+            pass
+
+    def open_history(self):
+        self.open_my_videos_by_url()
+        wait_and_get_element(self, self._HISTORY_BUTTON).click()
+        try:
+            wait_and_get_element(self, self._HISTORY_BUTTON).click()  # HI OK devs
         except StaleElementReferenceException:
             pass
 
