@@ -106,6 +106,34 @@ class VideoTest(unittest.TestCase):
 
         self.assertTrue(before_block_count == 1 and after_block_count == 0)
 
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    @unittest.expectedFailure
+    def test_outer_post_already_uploaded_video(self):
+        self.assertTrue(False)  # There's no UI solution for this
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    @unittest.expectedFailure
+    def test_outer_post_external_video(self):
+        self.assertTrue(False)  # There's no UI solution for this
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_outer_post_upload_video(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+        video_list_page = VideoListPage(self.driver)
+        video = video_list_page.wait_and_get_video_by_num(0)
+        before_video_id = video.get_attribute('data-id')
+
+        main_page.go_to_main()
+        wall_post = WallPost(self.driver)
+        attach_video_input = wall_post.get_attach_video_input()
+        attach_video_input.send_keys('content/video.mp4')
+
+        video_list_page = VideoListPage(self.driver)
+        video = video_list_page.wait_and_get_video_by_num(0)
+        after_video_id = video.get_attribute('data-id')
+
+        self.assertFalse(before_video_id == after_video_id)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_scrolling_loads_videos(self):
