@@ -36,6 +36,9 @@ class WallPost(Component):
     def get_added_blocks_count(self):
         return len(self.driver.find_elements_by_class_name('posting_block')) - 1
 
+    def empty(self):
+        [element.click() for element in self.driver.find_elements_by_class_name('posting_close')]
+
     def post(self):
         wait_and_get_element(self, self._SUBMIT_BUTTON).click()
 
