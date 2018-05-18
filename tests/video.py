@@ -77,6 +77,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_post_multiple_videos(self):
+        """
+        author: StealthTech
+        """
         main_page = MainPage(self.driver)
         main_page.open_note()
 
@@ -94,6 +97,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_post_delete_video(self):
+        """
+        author: StealthTech
+        """
         main_page = MainPage(self.driver)
         main_page.open_note()
 
@@ -112,15 +118,24 @@ class VideoTest(unittest.TestCase):
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     @unittest.expectedFailure
     def test_outer_post_already_uploaded_video(self):
+        """
+        author: StealthTech
+        """
         self.assertTrue(False)  # There's no UI solution for this
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     @unittest.expectedFailure
     def test_outer_post_external_video(self):
+        """
+        author: StealthTech
+        """
         self.assertTrue(False)  # There's no UI solution for this
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_outer_post_upload_video(self):
+        """
+        author: StealthTech
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
         video_list_page = VideoListPage(self.driver)
@@ -413,6 +428,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_video_get_link(self):
+        """
+        author: StealthTech
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -434,6 +452,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_can_add_and_remove_like(self):
+        """
+        author: StealthTech
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
