@@ -85,10 +85,27 @@ class VideoTest(unittest.TestCase):
             video_selector = VideoSelector(self.driver)
             video_selector.select_first()
 
-        wall_post.check_exist_video()
-        added_videos_count = wall_post.get_added_blocks_count()
+        added_video_count = wall_post.get_added_blocks_count()
 
-        self.assertTrue(added_videos_count == expected_video_count)
+        self.assertTrue(added_video_count == expected_video_count)
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_post_delete_video(self):
+        main_page = MainPage(self.driver)
+        main_page.open_note()
+
+        wall_post = WallPost(self.driver)
+        wall_post.open_video_select_dialog()
+
+        video_page = VideoSelector(self.driver)
+        video_page.select_first()
+
+        before_block_count = wall_post.get_added_blocks_count()
+        wall_post.empty()
+        after_block_count = wall_post.get_added_blocks_count()
+
+        self.assertTrue(before_block_count == 1 and after_block_count == 0)
+
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_scrolling_loads_videos(self):
