@@ -299,7 +299,7 @@ class VideoTest(unittest.TestCase):
         self.assertEqual(initial_count - 1, second_count,
                          "Not equals: {0} - 1 != {1}".format(initial_count, second_count))
 
-    #@unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_comment_video(self):
         """
         author: LionZXY
