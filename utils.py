@@ -9,6 +9,32 @@ from inspect import isroutine
 import constants
 
 
+class Counter:
+    def __init__(self, start=0):
+        self.counter = start
+
+    def next(self):
+        result = self.counter
+        self.counter += 1
+        return result
+
+
+test_exec_counter = Counter()
+
+
+def print_test_info(func):
+    def wrapped(*args, **kwargs):
+        doc = func.__doc__.strip()
+        lines = [line.strip().split(': ') for line in doc.split('\n')]
+        lines_str = '\n'.join([f'{k}: {v}' for k, v in lines])
+
+        test_exec_id = test_exec_counter.next()
+        print(f'\n{"~" * 10}\nВызов #{test_exec_id}\nТест: {func.__name__}\n{lines_str}\nРезультат: ', end='')
+
+        func(*args, **kwargs)
+    return wrapped
+
+
 def awaited_property(func_or_name, wait_for_visibility=True):
     # type: (function | str) -> property | function
     if isroutine(func_or_name):
