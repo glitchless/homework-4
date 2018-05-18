@@ -33,6 +33,12 @@ def wait_and_get_property(self, attr_name, wait_for_visibility=True):
     return wait_and_get_element(self, getattr(self, attr_name))
 
 
+def wait_text(self, xpath, text):
+    WebDriverWait(self.driver, constants.WAIT_TIME).until(
+        expected_conditions.text_to_be_present_in_element((By.XPATH, xpath), text)
+    )
+
+
 def wait_and_get_element(self, xpath, wait_for_visibility=True, long_wait=False):
     # type: (any, str) -> WebElement
     wait_count = constants.WAIT_TIME

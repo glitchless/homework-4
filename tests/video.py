@@ -254,6 +254,37 @@ class VideoTest(unittest.TestCase):
         video_page.watch_video()
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_subscription(self):
+        main_page = MainPage(self.driver)
+        main_page.go_to_videos()
+
+        video_page = VideoListPage(self.driver)
+        router.Router().open_subscriptions()
+        initial_count = video_page.count_subscribtions()
+
+        video_page.search('Test')
+        video_page.wait_open_search()
+        video_page.subscribe()
+
+        router.Router().open_subscriptions()
+        second_count = video_page.count_subscribtions()
+
+        self.assertEqual(initial_count + 1, second_count,
+                         "Not equals: {0} + 1 != {1}".format(initial_count, second_count))
+
+        initial_count = second_count
+
+        video_page.search('Test')
+        video_page.wait_open_search()
+        video_page.unsubscribe()
+
+        router.Router().open_subscriptions()
+        second_count = video_page.count_subscribtions()
+
+        self.assertEqual(initial_count - 1, second_count,
+                         "Not equals: {0} - 1 != {1}".format(initial_count, second_count))
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_comment_video(self):
         video_page = VideoPage(self.driver)
         video_page.open_by_id(self.TEST_VIDEO_ID)

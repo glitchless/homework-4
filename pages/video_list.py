@@ -12,7 +12,7 @@ from component import Component
 from urlparse import urljoin
 import constants
 import router
-from utils import awaited_property, wait_and_get_element, same_urls
+from utils import awaited_property, wait_and_get_element, same_urls, wait_text
 
 
 class VideoListPage(Page):
@@ -32,6 +32,10 @@ class VideoListPage(Page):
     _VIDEO_SEARCH_FIELD = '//input[@class="search-input_it it"]'
     _VIDEO_SEARCH_DIV = '//*[@data-fetch-type="search"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
+    _SEARCH_SUBSCRIBE = '//div[@class="vid-card_cnt soh-s js-droppable"]'
+    _UNSUBSCRIBE_BUTTON = '//a[@class="vl_btn foh-s __unsubscribe"]'
+    _SUBSCRIBES = '//div[@class="vl_subscriptions"]'
+    _SUBSCRIBE_BUTTON = './/a[@class="vl_btn foh-s"]'
     _VIDEO_UPLOAD_PROGRESS = '//div[@class="progress __dark"]'
     _VIDEO_ADD_BUTTON = '//*[@id="hook_Block_VideoVitrinaUploadButton"]/div/a[1]'
     _VIDEO_SCROLL_LIST = '//*[@id="layer_main_cnt_scroll"]'
@@ -130,6 +134,23 @@ class VideoListPage(Page):
         self.driver.execute_script('document.evaluate(`{xpath}`, document).iterateNext().scrollTo(0, {to})'
                                    .format(xpath=self._VIDEO_SCROLL_LIST, to=y))
 
+    def subscribe(self):
+        first_element = wait_and_get_element(self, self._SEARCH_SUBSCRIBE)
+        button = first_element.find_element_by_xpath(self._SUBSCRIBE_BUTTON)
+        self.driver.execute_script(
+            "arguments[0].style.visibility = 'visible'; arguments[0].classList.remove('foh-s');", button)
+        button.click()
+
+    def unsubscribe(self):
+        first_element = wait_and_get_element(self, self._SEARCH_SUBSCRIBE)
+        button = first_element.find_element_by_xpath(self._UNSUBSCRIBE_BUTTON)
+        self.driver.execute_script(
+            "arguments[0].style.visibility = 'visible'; arguments[0].classList.remove('foh-s');", button)
+        button.click()
+
+    def count_subscribtions(self):
+        return len(self.driver.find_elements_by_xpath(self._SUBSCRIBES))
+
     @property
     def videos(self):
         self.video_list
@@ -140,6 +161,7 @@ class VideoListPage(Page):
 
     def search(self, text):
         wait_and_get_element(self, self._VIDEO_SEARCH_FIELD).send_keys(text)
+        wait_text(self, router.Router._TAB_NAME_TEXT, u"Результаты поиска")
 
     @property
     def video_count(self):

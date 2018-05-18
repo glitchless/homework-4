@@ -1,3 +1,4 @@
+# coding=utf-8
 from urlparse import urljoin
 
 from selenium.common.exceptions import StaleElementReferenceException
@@ -6,7 +7,7 @@ from constants import BASE_URL
 from pages.component import Component
 from pages.page import Page
 from pages.video_list import VideoListPage
-from utils import wait_and_get_element, same_urls, start_with_url
+from utils import wait_and_get_element, same_urls, start_with_url, wait_text
 
 
 class Singleton(type):
@@ -33,6 +34,7 @@ class Router(object):
     _LIVE_BUTTON = '//a[@id="vv_btn_live"]'
     _SUGGEST_BUTTON = '//a[@id="vv_btn_suggestedAlbums"]'
     _CATALOG_BUTTON = '//a[@id="vv_btn_channels"]'
+    _TAB_NAME_TEXT = '//div[@class="mml_ucard_n_g"]'
     _SUBSCRIPTIONS_BUTTON = '//a[@id="vv_btn_subscriptions"]'
 
     MY_VIDEO_INNERPATHS = [
@@ -86,9 +88,11 @@ class Router(object):
 
     def open_subscriptions(self):
         wait_and_get_element(self, self._SUBSCRIPTIONS_BUTTON).click()
+        wait_text(self, self._TAB_NAME_TEXT, u"Мои подписки")
 
     def open_live(self):
         wait_and_get_element(self, self._LIVE_BUTTON).click()
+        wait_text(self, self._TAB_NAME_TEXT, u"Прямой эфир")
 
     def open_watchlater(self):
         self.open_my_videos_by_url()
@@ -106,3 +110,7 @@ class Router(object):
             url = urljoin(BASE_URL, relative_url)
 
         self.driver.get(url)
+
+    @property
+    def TAB_NAME_TEXT(self):
+        return self._TAB_NAME_TEXT
