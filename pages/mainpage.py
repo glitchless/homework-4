@@ -12,6 +12,7 @@ class MainPage(Page):
     _VIDEOPAGE_BUTTON = '//div[@class="toolbar_nav_a toolbar_nav_a__video"]'
     _MESSAGE_BUTTON = '//li[@data-l="t,messages"]'
     _NOTE_FIELD = '//div[@class="input_placeholder"]'
+    _VIDEO_CONTENT = '//div[@class="js-loader-container clearfix"]'
 
     def open_note(self):
         wait_and_get_element(self, self._NOTE_FIELD).click()
@@ -21,6 +22,7 @@ class MainPage(Page):
 
     def go_to_videos(self):
         wait_and_get_element(self, self._VIDEOPAGE_BUTTON).click()
+        wait_and_get_element(self, self._VIDEO_CONTENT)
 
     def go_to_message(self):
         wait_and_get_element(self, self._MESSAGE_BUTTON).click()

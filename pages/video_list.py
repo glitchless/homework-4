@@ -50,7 +50,7 @@ class VideoListPage(Page):
     _VIDEO_BY_NUM_NEW = '//*[@class="js-loader-container clearfix"]/div[contains(concat(" ", normalize-space(@class), " "), " vid-card ")][{num}]'
 
     def wait_load(self):
-        wait_and_get_element(self, self._VIDEO_UPLOAD_PROGRESS)
+        wait_and_get_element(self, self._VIDEO_UPLOAD_PROGRESS, True, True)
 
     def wait_open_stream(self):
         WebDriverWait(self.driver, constants.WAIT_TIME).until(VideoListPage.open_stream())
@@ -199,5 +199,5 @@ class VideoListPage(Page):
                 self.driver.execute_script(
                     'document.evaluate(`{xpath}`, document).iterateNext().dispatchEvent(new Event("change"))'.format(
                         xpath=self._VIDEO_UPLOAD))
-            except WebDriverException:
-                pass
+            except WebDriverException as ex:
+                print "Warning! {0}".format(ex)

@@ -1,4 +1,5 @@
 # coding=utf-8
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -49,8 +50,15 @@ class VideoPage(Page):
             wait_and_get_element(self, self._STREAM_COMMENT_BUTTON).click()
             return
 
-        wait_and_get_element(self, self._VIDEO_COMMENT_FIELD).send_keys(text)
-        wait_and_get_element(self, self._VIDEO_COMMENT_BUTTON).click()
+        try:
+            wait_and_get_element(self, self._VIDEO_COMMENT_FIELD).send_keys(text)
+            wait_and_get_element(self, self._VIDEO_COMMENT_BUTTON).click()
+        except TimeoutException:
+            # Фикс
+            wait_and_get_element(self, self._STREAM_COMMENT_FIELD).send_keys(text)
+            wait_and_get_element(self, self._STREAM_COMMENT_BUTTON).click()
+
+
 
     def remove_comment(self, comment):
         remove_button = comment.find_element_by_class_name('comments_remove')
