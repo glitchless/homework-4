@@ -15,7 +15,6 @@ class WallPost(Component):
     _SUBMIT_BUTTON = '//div[@class="posting_submit button-pro"]'
     _ATTACH_BUTTONS = '//div[@class="posting_ac"]'
 
-
     # Говнофикс бага с не кликающим элементом
     def open_video_select_dialog(self):
         print('open_video_select_dialog')
@@ -33,6 +32,9 @@ class WallPost(Component):
 
     def check_exist_video(self):
         self.driver.find_element_by_xpath(self._VIDEO_COMPONENT)
+
+    def get_added_blocks_count(self):
+        return len(self.driver.find_elements_by_class_name('posting_block')) - 1
 
     def post(self):
         wait_and_get_element(self, self._SUBMIT_BUTTON).click()
