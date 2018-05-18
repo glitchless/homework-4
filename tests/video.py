@@ -18,7 +18,7 @@ SCREENSHOT_PATH = constants.SCREENSHOT_PATH + '/video/'
 
 
 class VideoTest(unittest.TestCase):
-    LOGIN = environ['LOGIN']  # type: str
+    LOGIN = environ['LOGIN']  # type: strТ
     PASSWORD = environ['PASSWORD']  # type: str
     driver = None  # type: webdriver.Remote
     TEST_VIDEO_ID = 566094269061
@@ -52,7 +52,7 @@ class VideoTest(unittest.TestCase):
 
         video_page.wait_for_load()
 
-        self.assertEquals(self.driver.current_url, constants.BASE_URL + VideoListPage.PATH + 'top')
+        self.assertEqual(self.driver.current_url, constants.BASE_URL + VideoListPage.PATH + 'top')
 
         if constants.MAKE_SCREENSHOTS:
             self.driver.save_screenshot(
@@ -172,7 +172,7 @@ class VideoTest(unittest.TestCase):
 
         self.assertEqual(video_count_initial + 1, video_list_page.video_count, 'Video wasn`t added')
         video_id = video.get_attribute('data-id')
-        print video_id
+        print(video_id)
 
         video_list_page.delete_video(video)
         video_ids_after_delete = video_list_page.video_ids
@@ -315,7 +315,7 @@ class VideoTest(unittest.TestCase):
         video_page.search('Test')
         video_page.wait_open_search()
         video_id = int(video_page.wait_and_get_video_by_num(0).get_attribute('data-id'))
-        self.assertEquals(video_id, 1691355875,
+        self.assertEqual(video_id, 1691355875,
                           'First video need be https://ok.ru/video/1691355875 by "Test" request. Not {0}'.format(
                               video_id))
 

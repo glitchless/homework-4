@@ -9,7 +9,7 @@ if __name__ == '__main__':
     browser = os.environ.get('BROWSER', 'CHROME')
     login = os.environ['LOGIN']
     password = os.environ['PASSWORD']
-    print browser, login, password
+    print(browser, login, password)
     driver = webdriver.Remote(
         command_executor=constants.COMMAND_EXECUTOR,
         desired_capabilities=getattr(DesiredCapabilities, browser).copy(),

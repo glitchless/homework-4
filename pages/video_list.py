@@ -7,9 +7,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-from page import Page
-from component import Component
-from urlparse import urljoin
+from .page import Page
+from .component import Component
+from urllib.parse import urljoin
 import constants
 import router
 from utils import awaited_property, wait_and_get_element, same_urls, wait_text
@@ -161,7 +161,7 @@ class VideoListPage(Page):
 
     def search(self, text):
         wait_and_get_element(self, self._VIDEO_SEARCH_FIELD).send_keys(text)
-        wait_text(self, router.Router._TAB_NAME_TEXT, u"Результаты поиска")
+        wait_text(self, router.Router._TAB_NAME_TEXT, "Результаты поиска")
 
     @property
     def video_count(self):
@@ -169,7 +169,7 @@ class VideoListPage(Page):
 
     @property
     def video_ids(self):
-        return map(lambda node: int(node.get_attribute('data-id')), self.videos)
+        return [int(node.get_attribute('data-id')) for node in self.videos]
 
     class VideoUploadDialog(Component):
         _EXTERNAL_UPLOAD_BUTTON = '//*[@id="vvc-filter"]/span[2]'

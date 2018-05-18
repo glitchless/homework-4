@@ -1,5 +1,5 @@
 # coding=utf-8
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 from selenium.common.exceptions import StaleElementReferenceException
 
@@ -19,9 +19,7 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class Router(object):
-    __metaclass__ = Singleton
-
+class Router(object, metaclass=Singleton):
     def __init__(self, driver=None):
         if driver:
             self.driver = driver
@@ -44,7 +42,7 @@ class Router(object):
 
     @property
     def is_on_myvideos_page(self):
-        return bool(filter(lambda url: same_urls(self.driver.current_url, url), self.MY_VIDEO_INNERPATHS))
+        return bool([url for url in self.MY_VIDEO_INNERPATHS if same_urls(self.driver.current_url, url)])
 
     @property
     def is_on_search_page(self):
@@ -70,35 +68,35 @@ class Router(object):
 
     def open_my_videos(self):
         wait_and_get_element(self, self._MYWIDEO_BUTTON).click()
-        wait_text(self, self._TAB_NAME_TEXT, u"Моё видео")
+        wait_text(self, self._TAB_NAME_TEXT, "Моё видео")
 
     def open_top(self):
         wait_and_get_element(self, self._TOP_BUTTON).click()
-        wait_text(self, self._TAB_NAME_TEXT, u"Топ недели")
+        wait_text(self, self._TAB_NAME_TEXT, "Топ недели")
 
     def open_liveapp(self):
         wait_and_get_element(self, self._LIVEAPP_BUTTON).click()
-        wait_text(self, self._TAB_NAME_TEXT, u"OK Live")
+        wait_text(self, self._TAB_NAME_TEXT, "OK Live")
 
     def open_suggest(self):
         wait_and_get_element(self, self._SUGGEST_BUTTON).click()
-        wait_text(self, self._TAB_NAME_TEXT, u"Популярное")
+        wait_text(self, self._TAB_NAME_TEXT, "Популярное")
 
     def open_new(self):
         wait_and_get_element(self, self._NEW_BUTTON).click()
-        wait_text(self, self._TAB_NAME_TEXT, u"Новинки")
+        wait_text(self, self._TAB_NAME_TEXT, "Новинки")
 
     def open_catalog(self):
         wait_and_get_element(self, self._CATALOG_BUTTON).click()
-        wait_text(self, self._TAB_NAME_TEXT, u"Каталог")
+        wait_text(self, self._TAB_NAME_TEXT, "Каталог")
 
     def open_subscriptions(self):
         wait_and_get_element(self, self._SUBSCRIPTIONS_BUTTON).click()
-        wait_text(self, self._TAB_NAME_TEXT, u"Мои подписки")
+        wait_text(self, self._TAB_NAME_TEXT, "Мои подписки")
 
     def open_live(self):
         wait_and_get_element(self, self._LIVE_BUTTON).click()
-        wait_text(self, self._TAB_NAME_TEXT, u"Прямой эфир")
+        wait_text(self, self._TAB_NAME_TEXT, "Прямой эфир")
 
     def open_watchlater(self):
         self.open_my_videos_by_url()

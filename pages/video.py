@@ -5,9 +5,9 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
 import router
-from page import Page
+from .page import Page
 from os import environ
-from component import Component
+from .component import Component
 import constants
 from utils import awaited_property, wait_and_get_element
 

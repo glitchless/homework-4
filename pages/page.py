@@ -1,4 +1,4 @@
-from urlparse import urljoin
+from urllib.parse import urljoin
 from selenium.webdriver import Remote
 
 import constants

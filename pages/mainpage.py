@@ -1,7 +1,7 @@
 # coding=utf-8
-from page import Page
+from .page import Page
 from os import environ
-from component import Component
+from .component import Component
 from pages.messages import MessagePage
 from utils import wait_and_get_element, awaited_property
 
