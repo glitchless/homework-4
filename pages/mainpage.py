@@ -8,12 +8,16 @@ from utils import wait_and_get_element, awaited_property
 
 class MainPage(Page):
     PATH = ''
+    _MAIN_PAGE_BUTTON = '//*[@id="topPanelLeftCorner"]'
     _VIDEOPAGE_BUTTON = '//div[@class="toolbar_nav_a toolbar_nav_a__video"]'
     _MESSAGE_BUTTON = '//li[@data-l="t,messages"]'
     _NOTE_FIELD = '//div[@class="input_placeholder"]'
 
     def open_note(self):
         wait_and_get_element(self, self._NOTE_FIELD).click()
+
+    def go_to_main(self):
+        wait_and_get_element(self, self._MAIN_PAGE_BUTTON).click()
 
     def go_to_videos(self):
         wait_and_get_element(self, self._VIDEOPAGE_BUTTON).click()

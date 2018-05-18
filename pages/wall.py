@@ -14,6 +14,8 @@ class WallPost(Component):
     _VIDEO_COMPONENT = '//*[@class="hookBlock"]/div/div'
     _SUBMIT_BUTTON = '//div[@class="posting_submit button-pro"]'
     _ATTACH_BUTTONS = '//div[@class="posting_ac"]'
+    _ATTACH_VIDEO_BUTTON = '//*[@id="hook_Block_PostingForm"]/div/div/div/span[2]'
+    _ATTACH_VIDEO_INPUT = '//*[@id="hook_Block_PostingForm"]/div/div/div/span[2]/input'
 
     # Говнофикс бага с не кликающим элементом
     def open_video_select_dialog(self):
@@ -38,6 +40,12 @@ class WallPost(Component):
 
     def empty(self):
         [element.click() for element in self.driver.find_elements_by_class_name('posting_close')]
+
+    def get_attach_video_button(self):
+        return wait_and_get_element(self, self._ATTACH_VIDEO_BUTTON)
+
+    def get_attach_video_input(self):
+        return wait_and_get_element(self, self._ATTACH_VIDEO_INPUT)
 
     def post(self):
         wait_and_get_element(self, self._SUBMIT_BUTTON).click()
