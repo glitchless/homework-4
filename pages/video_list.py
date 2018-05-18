@@ -200,4 +200,4 @@ class VideoListPage(Page):
                     'document.evaluate(`{xpath}`, document).iterateNext().dispatchEvent(new Event("change"))'.format(
                         xpath=self._VIDEO_UPLOAD))
             except WebDriverException as ex:
-                print "Warning! {0}".format(ex)
+                print("Warning! {0}".format(ex))

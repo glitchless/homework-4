@@ -140,6 +140,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_scrolling_loads_videos(self):
+        """
+        author: Ansile
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -156,6 +159,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skip('WIP')
     def test_external_upload_video_and_delete_video(self):
+        """
+        author: Ansile
+        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -377,6 +383,9 @@ class VideoTest(unittest.TestCase):
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_video_watch_later(self):
+        """
+        author: Ansile
+        """
         video_list_page = VideoListPage(self.driver)
         video_page = VideoPage(self.driver)
 
