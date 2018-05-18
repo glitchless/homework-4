@@ -32,6 +32,7 @@ class VideoListPage(Page):
     _VIDEO_SEARCH_FIELD = '//input[@class="search-input_it it"]'
     _VIDEO_SEARCH_DIV = '//*[@data-fetch-type="search"]'
     _VIDEO_LIST = '//*[@id="vv_main_content"]/div/div/div[1]'
+    _POPUP_CONTAINER = '//*[@id="hook_Block_VideoVitrinaPopup"]/div[1]'
     _SEARCH_SUBSCRIBE = '//div[@class="vid-card_cnt soh-s js-droppable"]'
     _UNSUBSCRIBE_BUTTON = '//a[@class="vl_btn foh-s __unsubscribe"]'
     _SUBSCRIBES = '//div[@class="vl_subscriptions"]'
@@ -85,11 +86,11 @@ class VideoListPage(Page):
         self.wait_and_get_hook_block
 
     def delete_video(self, video):
-        hover = ActionChains(self.driver).move_to_element(video)
-        hover.perform()
+        hidden_panel = video.find_element_by_class_name('vid-card_ac-aux')
 
         delete_button = video.find_element_by_class_name('vl_ic_delete')
-        delete_button.click()
+        self.driver.execute_script('arguments[0].click();', delete_button)
+        # clicking the button that is wrapped into hidden elements like a freaking chicken roll TODO: maybe refactor
 
         VideoListPage(self.driver).confirm_action()
 
@@ -107,6 +108,11 @@ class VideoListPage(Page):
     @awaited_property('_HOOK_BLOCK')
     def wait_and_get_hook_block(self):
         pass
+
+    def wait_until_popup_is_closed(self):
+        WebDriverWait(self.driver, constants.WAIT_TIME).until(
+            expected_conditions.invisibility_of_element_located((By.XPATH, self._POPUP_CONTAINER))
+        )
 
     def check_stream_is_online(self, element):
         try:

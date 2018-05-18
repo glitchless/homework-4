@@ -186,7 +186,7 @@ class VideoTest(unittest.TestCase):
 
         self.assertTrue(video, 'Didn`t load videos on scroll')
 
-    @unittest.skip('WIP')
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     @print_test_info
     def test_external_upload_video_and_delete_video(self):
         """
@@ -207,11 +207,12 @@ class VideoTest(unittest.TestCase):
 
         video_upload_dialog.add_external_video(self.TEST_EXTERNAL_VIDEO_LINK)
 
+        video_list_page.wait_until_popup_is_closed()
+
         video = video_list_page.wait_and_get_video_by_num(0)
 
         self.assertEqual(video_count_initial + 1, video_list_page.video_count, 'Video wasn`t added')
         video_id = video.get_attribute('data-id')
-        print(video_id)
 
         video_list_page.delete_video(video)
         video_ids_after_delete = video_list_page.video_ids
