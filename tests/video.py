@@ -92,21 +92,57 @@ class VideoTest(unittest.TestCase):
         self.assertTrue(added_video_count == expected_video_count)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    def test_post_delete_video(self):
+    def test_post_video_with_text(self):
+        """
+        Описание: Можно добавить видео к посту через диалог и опубликовать его (с текстом)
+        """
         main_page = MainPage(self.driver)
         main_page.open_note()
 
         wall_post = WallPost(self.driver)
+        wall_post.write_post("Post")
         wall_post.open_video_select_dialog()
 
         video_page = VideoSelector(self.driver)
         video_page.select_first()
+        wall_post.post()
 
-        before_block_count = wall_post.get_added_blocks_count()
-        wall_post.empty()
-        after_block_count = wall_post.get_added_blocks_count()
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_post_video_with_text_smile(self):
+        """
+        Описание: Можно добавить видео к посту через диалог и опубликовать его (со смайлом)
+        """
+        main_page = MainPage(self.driver)
+        main_page.open_note()
 
-        self.assertTrue(before_block_count == 1 and after_block_count == 0)
+        wall_post = WallPost(self.driver)
+        wall_post.write_post("Post")
+        wall_post.open_smile_list()
+        wall_post.add_smile_totext()
+        wall_post.close_smile_list()
+        wall_post.open_video_select_dialog()
+
+        video_page = VideoSelector(self.driver)
+        video_page.select_first()
+        wall_post.post()
+
+    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
+    def test_post_video_with_smile(self):
+        """
+        Описание: Можно добавить видео к посту через диалог и опубликовать его (со смайлом)
+        """
+        main_page = MainPage(self.driver)
+        main_page.open_note()
+
+        wall_post = WallPost(self.driver)
+        wall_post.open_smile_list()
+        wall_post.add_smile_totext()
+        wall_post.close_smile_list()
+        wall_post.open_video_select_dialog()
+
+        video_page = VideoSelector(self.driver)
+        video_page.select_first()
+        wall_post.post()
 
     @unittest.skip("WIP")
     def test_outer_post_upload_video(self):
@@ -308,16 +344,6 @@ class VideoTest(unittest.TestCase):
         self.assertEqual(video_id, 1691355875,
                          'First video need be https://ok.ru/video/1691355875 by "Test" request. Not {0}'.format(
                              video_id))
-
-    def post_video_with_text(self):
-        """
-        Описание: Можно добавить видео к посту через диалог и опубликовать его (с текстом)
-        """
-        main_page = MainPage(self.driver)
-        main_page.open_note()
-
-        wall_post = WallPost(self.driver)
-        wall_post.write_post("Post")
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
     def test_tab_change(self):
