@@ -22,7 +22,7 @@ class VideoTest(unittest.TestCase):
     LOGIN = environ['LOGIN']  # type: strТ
     PASSWORD = environ['PASSWORD']  # type: str
     driver = None  # type: webdriver.Remote
-    TEST_VIDEO_ID = 566094269061
+    TEST_VIDEO_ID = 657791912610
     TEST_EXTERNAL_VIDEO_LINK = 'https://www.youtube.com/watch?v=OPf0YbXqDm0'
 
     @classmethod
@@ -37,6 +37,7 @@ class VideoTest(unittest.TestCase):
         router.Router(driver=cls.driver)
 
     def setUp(self):
+        self.driver.refresh()
         main_page = MainPage(self.driver)
         main_page.open()
         main_page.authentificate(self.LOGIN, self.PASSWORD)
@@ -45,7 +46,6 @@ class VideoTest(unittest.TestCase):
                 SCREENSHOT_PATH + 'login/{time}.png'.format(time=datetime.now().time().isoformat()))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_going_to_videopage(self):
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
@@ -61,11 +61,7 @@ class VideoTest(unittest.TestCase):
                 SCREENSHOT_PATH + 'videopage/{time}.png'.format(time=datetime.now().time().isoformat()))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_post_video(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
         main_page.open_note()
 
@@ -79,12 +75,7 @@ class VideoTest(unittest.TestCase):
         wall_post.post()
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_post_multiple_videos(self):
-        """
-        Автор: StealthTech
-        Описание: Добавление нескольких видео в пост
-        """
         main_page = MainPage(self.driver)
         main_page.open_note()
 
@@ -101,12 +92,7 @@ class VideoTest(unittest.TestCase):
         self.assertTrue(added_video_count == expected_video_count)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_post_delete_video(self):
-        """
-        Автор: StealthTech
-        Описание: Удаление видео после добавления в пост
-        """
         main_page = MainPage(self.driver)
         main_page.open_note()
 
@@ -122,33 +108,8 @@ class VideoTest(unittest.TestCase):
 
         self.assertTrue(before_block_count == 1 and after_block_count == 0)
 
-    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @unittest.expectedFailure
-    @print_test_info
-    def test_outer_post_already_uploaded_video(self):
-        """
-        Автор: StealthTech
-        Описание: Добавление видео, уже загруженного на сайт, через создание поста (без модального окна)
-        """
-        self.assertTrue(False)  # There's no UI solution for this
-
-    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @unittest.expectedFailure
-    @print_test_info
-    def test_outer_post_external_video(self):
-        """
-        Автор: StealthTech
-        Описание: Добавление внешнего видео через создание поста (без модального окна)
-        """
-        self.assertTrue(False)  # There's no UI solution for this
-
-    @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
+    @unittest.skip("WIP")
     def test_outer_post_upload_video(self):
-        """
-        Автор: StealthTech
-        Описание: Загрузка видео с компьютера через создание поста (без модального окна)
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
         video_list_page = VideoListPage(self.driver)
@@ -167,11 +128,7 @@ class VideoTest(unittest.TestCase):
         self.assertFalse(before_video_id == after_video_id)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_scrolling_loads_videos(self):
-        """
-        Автор: Ansile
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -187,11 +144,7 @@ class VideoTest(unittest.TestCase):
         self.assertTrue(video, 'Didn`t load videos on scroll')
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_external_upload_video_and_delete_video(self):
-        """
-        Автор: Ansile
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -221,11 +174,7 @@ class VideoTest(unittest.TestCase):
         self.assertEqual(video_count_initial, video_list_page.video_count)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_upload_video(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -247,11 +196,7 @@ class VideoTest(unittest.TestCase):
         video_page.delete_video(video)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_attach_video_message(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
 
         message_page = main_page.go_to_message()
@@ -268,11 +213,7 @@ class VideoTest(unittest.TestCase):
                         "{0} !> {1}".format(second_message_count, initial_message_count))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_comment_stream(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -290,11 +231,7 @@ class VideoTest(unittest.TestCase):
         video_page.find_comment_with_text('Test{0}'.format(self.LOGIN))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_open_video(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -307,11 +244,7 @@ class VideoTest(unittest.TestCase):
         video_page.watch_video()
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_subscription(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -342,11 +275,7 @@ class VideoTest(unittest.TestCase):
                          "Not equals: {0} - 1 != {1}".format(initial_count, second_count))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_comment_video(self):
-        """
-        Автор: LionZXY
-        """
         video_page = VideoPage(self.driver)
         video_page.open_by_id(self.TEST_VIDEO_ID)
 
@@ -355,11 +284,7 @@ class VideoTest(unittest.TestCase):
         video_page.remove_comment(element)
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_open_stream(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -372,11 +297,7 @@ class VideoTest(unittest.TestCase):
         video_page.watch_video()
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_search(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -385,15 +306,21 @@ class VideoTest(unittest.TestCase):
         video_page.wait_open_search()
         video_id = int(video_page.wait_and_get_video_by_num(0).get_attribute('data-id'))
         self.assertEqual(video_id, 1691355875,
-                          'First video need be https://ok.ru/video/1691355875 by "Test" request. Not {0}'.format(
-                              video_id))
+                         'First video need be https://ok.ru/video/1691355875 by "Test" request. Not {0}'.format(
+                             video_id))
+
+    def post_video_with_text(self):
+        """
+        Описание: Можно добавить видео к посту через диалог и опубликовать его (с текстом)
+        """
+        main_page = MainPage(self.driver)
+        main_page.open_note()
+
+        wall_post = WallPost(self.driver)
+        wall_post.write_post("Post")
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_tab_change(self):
-        """
-        Автор: LionZXY
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -422,11 +349,7 @@ class VideoTest(unittest.TestCase):
         self.assertEqual(self.driver.current_url, "{0}video/{1}".format(constants.BASE_URL, 'subscriptions'))
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_video_watch_later(self):
-        """
-        Автор: Ansile
-        """
         video_list_page = VideoListPage(self.driver)
         video_page = VideoPage(self.driver)
 
@@ -453,11 +376,7 @@ class VideoTest(unittest.TestCase):
                       'Didn`t add video to watch later page on marking it watch later')
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_video_get_link(self):
-        """
-        Автор: StealthTech
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 
@@ -478,11 +397,7 @@ class VideoTest(unittest.TestCase):
         self.assertEqual(video_id, video_page.get_video_id())
 
     @unittest.skipIf(constants.SKIP_FINISHED_TESTS, '')
-    @print_test_info
     def test_can_add_and_remove_like(self):
-        """
-        Автор: StealthTech
-        """
         main_page = MainPage(self.driver)
         main_page.go_to_videos()
 

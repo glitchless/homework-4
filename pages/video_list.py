@@ -1,7 +1,7 @@
 # coding=utf-8
 import os
 
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -175,7 +175,13 @@ class VideoListPage(Page):
 
     @property
     def video_ids(self):
-        return [int(node.get_attribute('data-id')) for node in self.videos]
+        to_return = []
+        for node in self.videos:
+            try:
+                to_return.append(int(node.get_attribute('data-id')))
+            except StaleElementReferenceException:
+                pass  # Проблема в том, что DOM Selenium не успевает засинхрониться с реальным dom.
+        return to_return
 
     class VideoUploadDialog(Component):
         _EXTERNAL_UPLOAD_BUTTON = '//*[@id="vvc-filter"]/span[2]'

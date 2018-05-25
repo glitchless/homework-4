@@ -10,12 +10,13 @@ from utils import wait_and_get_element, awaited_property
 
 
 class WallPost(Component):
-    _VIDEO_ADD_BUTTON = '//*[@id="hook_Block_MediaStatusLayerBody"]/div[1]/div[2]/div/div[7]/div/div/div/div[2]/div[2]/div'
+    _VIDEO_ADD_BUTTON = '//div[@data-id="Status_add_video"]'
     _VIDEO_COMPONENT = '//*[@class="hookBlock"]/div/div'
     _SUBMIT_BUTTON = '//div[@class="posting_submit button-pro"]'
     _ATTACH_BUTTONS = '//div[@class="posting_ac"]'
-    _ATTACH_VIDEO_BUTTON = '//*[@id="hook_Block_PostingForm"]/div/div/div/span[2]'
-    _ATTACH_VIDEO_INPUT = '//*[@id="hook_Block_PostingForm"]/div/div/div/span[2]/input'
+    _ATTACH_VIDEO_BUTTON = '//span[@data-l="t,pf_video_button"]'
+    _ATTACH_VIDEO_INPUT = '//span[@data-l="t,pf_video_button"]/input'
+    _POST_TEXT = '//div[@data-module="postingForm/mediaText"]'
 
     # Говнофикс бага с не кликающим элементом
     def open_video_select_dialog(self):
@@ -36,6 +37,9 @@ class WallPost(Component):
 
     def get_added_blocks_count(self):
         return len(self.driver.find_elements_by_class_name('posting_block')) - 1
+
+    def write_post(self, text):
+        wait_and_get_element(self, self._POST_TEXT).send_keys(text)
 
     def empty(self):
         [element.click() for element in self.driver.find_elements_by_class_name('posting_close')]

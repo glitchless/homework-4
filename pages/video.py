@@ -31,12 +31,12 @@ class VideoPage(Page):
     _STREAM_COMMENT_BUTTON = '//button[@class="button-pro vp-chat_send"]'
     _VIDEO_COMMENT_BUTTON = '//button[@data-l="t,submit"]'
     _REMOVE_COMMENT_BUTTON = '//a[@class="fade-on-hover comments_remove ic10 ic10_close-g"]'
-    _VIDEO_PLAYER = '//*[@id="VideoAutoplayPlayerE"]/div/div[2]/video'
-    _VIDEO_PAGE_GET_LINK_BUTTON = '//*[@id="VideoAutoplayPlayerE"]/div/div[4]/div[2]'
-    _VIDEO_PAGE_GET_LINK_INPUT = '//*[@id="VideoAutoplayPlayerE"]/div/div[7]/div[2]/div[2]/input'
-    _VIDEO_PAGE_COMMENTS_BUTTON = '//*[@id="vp_cnt"]/div[1]/div/div[2]/div[2]/ul/li[1]/div/a'
-    _VIDEO_PAGE_LIKE_BUTTON_CONTAINER = '//*[@id="vp_cnt"]/div[1]/div/div[2]/div[2]/ul/li[3]/div/div'
-    _VIDEO_PAGE_LIKE_BUTTON = '//*[@id="vp_cnt"]/div[1]/div/div[2]/div[2]/ul/li[3]/div/div/span'
+    _VIDEO_PLAYER = '//div[@class="html5-vpl_vid"]/video'
+    _VIDEO_PAGE_GET_LINK_BUTTON = '//div[@al-click="openDialog(\'share\')"]'
+    _VIDEO_PAGE_GET_LINK_INPUT = '//div[@al-controller="ShareDialogController"]//input'
+    _VIDEO_PAGE_COMMENTS_BUTTON = '//ul[@class="widget-list"]/li[1]/div/a'
+    _VIDEO_PAGE_LIKE_BUTTON_CONTAINER = '//ul[@class="widget-list"]/li[3]/div/div'
+    _VIDEO_PAGE_LIKE_BUTTON = '//ul[@class="widget-list"]/li[3]/div/div/span'
 
     def wait_for_load(self):
         self.wait_and_get_hook_block
@@ -57,8 +57,6 @@ class VideoPage(Page):
             # Фикс
             wait_and_get_element(self, self._STREAM_COMMENT_FIELD).send_keys(text)
             wait_and_get_element(self, self._STREAM_COMMENT_BUTTON).click()
-
-
 
     def remove_comment(self, comment):
         remove_button = comment.find_element_by_class_name('comments_remove')
